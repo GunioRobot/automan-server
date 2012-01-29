@@ -1,38 +1,38 @@
 module CodeRay
 module Scanners
-  
+
   # YAML Scanner
   #
   # Based on the YAML scanner from Syntax by Jamis Buck.
   class YAML < Scanner
-    
+
     register_for :yaml
     file_extension 'yml'
-    
+
     KINDS_NOT_LOC = :all
-    
+
     def scan_tokens tokens, options
-      
+
       value_expected = nil
       state = :initial
       key_indent = indent = 0
-      
+
       until eos?
-        
+
         kind = nil
         match = nil
         key_indent = nil if bol?
-        
+
         if match = scan(/ +[\t ]*/)
           kind = :space
-          
+
         elsif match = scan(/\n+/)
           kind = :space
           state = :initial if match.index(?\n)
-          
+
         elsif match = scan(/#.*/)
           kind = :comment
-          
+
         elsif bol? and case
           when match = scan(/---|\.\.\./)
             tokens << [:open, :head]
@@ -43,7 +43,7 @@ module Scanners
             tokens << [match, :doctype]
             next
           end
-        
+
         elsif state == :value and case
           when !check(/(?:"[^"]*")(?=: |:$)/) && scan(/"/)
             tokens << [:open, :string]
@@ -65,7 +65,7 @@ module Scanners
             tokens << [matched, :string] if scan(/(?:\n+ {#{string_indent + 1}}.*)+/)
             next
           end
-          
+
         elsif case
           when match = scan(/[-:](?= |$)/)
             state = :value if state == :colon && (match == ':' || match == '-')
@@ -112,29 +112,29 @@ module Scanners
           when scan(/[^:\s]+(:(?! |$)[^:\s]*)*/)
             kind = :error
           end
-          
+
         else
           getch
           kind = :error
-          
+
         end
-        
+
         match ||= matched
-        
+
         if $CODERAY_DEBUG and not kind
           raise_inspect 'Error token %p in line %d' %
             [[match, kind], line], tokens, state
         end
         raise_inspect 'Empty token', tokens, state unless match
-        
+
         tokens << [match, kind]
-        
+
       end
-      
+
       tokens
     end
-    
+
   end
-  
+
 end
 end

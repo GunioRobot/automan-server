@@ -18,7 +18,7 @@
 #     class Integer
 #       #
 #       # RDoc comments.
-#       # 
+#       #
 #       def even?
 #         self % 2 == 0
 #       end

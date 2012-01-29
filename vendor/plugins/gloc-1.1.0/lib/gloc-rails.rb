@@ -13,7 +13,7 @@ module ActionController #:nodoc:
       # It first checks the params, then a cookie and then the HTTP_ACCEPT_LANGUAGE
       # request header. If a language is found to match or be similar to a currently
       # valid language, then it sets the current_language of the controller.
-      # 
+      #
       #   class ExampleController < ApplicationController
       #     set_language :en
       #     autodetect_language_filter :except => 'monkey', :on_no_lang => :lang_not_autodetected_callback
@@ -23,7 +23,7 @@ module ActionController #:nodoc:
       #       redirect_to somewhere
       #     end
       #   end
-      # 
+      #
       # The <tt>args</tt> for this filter are exactly the same the arguments of
       # <tt>before_filter</tt> with the following exceptions:
       # * <tt>:check_params</tt> -- If false, then params will not be checked for a language.
@@ -37,7 +37,7 @@ module ActionController #:nodoc:
       # * <tt>:on_no_lang</tt> -- You can specify the name of a callback function to be called when the language
       #   couldn't be detected automatically. The param must be a Symbol or a String which is the name of the function.
       #   The callback function must be instance level.
-      #   
+      #
       # You override the default names of the param or cookie by calling <tt>GLoc.set_config :default_param_name => 'new_param_name'</tt>
       # and <tt>GLoc.set_config :default_cookie_name => 'new_cookie_name'</tt>.
       def autodetect_language_filter(*args)
@@ -71,7 +71,7 @@ module ActionController #:nodoc:
           x << "else; ret= c.#{options.delete(:on_no_lang)};"
         end
         x << 'end; ret }'
-        
+
         # Create filter
         block= eval x
         before_filter(*args, &block)
@@ -105,14 +105,14 @@ module ActionView #:nodoc:
   # the current language of the controller.
   class Base
     include GLoc
-    
+
     alias :initialize_without_gloc :initialize
     def initialize(base_path = nil, assigns_for_first_render = {}, controller = nil)
       initialize_without_gloc(base_path, assigns_for_first_render, controller)
       set_language controller.current_language unless controller.nil?
     end
   end
-  
+
   module Helpers #:nodoc:
     class InstanceTag
       include GLoc
@@ -130,7 +130,7 @@ module ActiveRecord #:nodoc:
   class Base #:nodoc:
     include GLoc
   end
-  
+
 #  class Errors
 #    include GLoc
 #    alias :add_without_gloc :add
@@ -154,7 +154,7 @@ module ActiveRecord #:nodoc:
 #      @base.current_language
 #    end
 #  end
-  
+
   module Validations #:nodoc:
     module ClassMethods
       # The default Rails version of this function creates an error message and then

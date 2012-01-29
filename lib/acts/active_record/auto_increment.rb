@@ -15,17 +15,17 @@ module Acts #:nodoc:
         # Configuration options are:
         #
         # * +column+ - specifies the column name to auto-increment
-        # * +scope+ - restricts what is to be considered a list. Given a symbol, it'll attach <tt>_id</tt> 
+        # * +scope+ - restricts what is to be considered a list. Given a symbol, it'll attach <tt>_id</tt>
         def acts_as_autoincrement(*args)
           if args.empty? || !([Symbol, String].include?(args.first.class))
             raise ArgumentError, "the first argument should be a 'column name'"
           end
-          
+
           options = args.extract_options!
           configuration = {:scope => "1 = 1", :column=> args.first}
           configuration.update(options)
           configuration[:scope] = "#{configuration[:scope]}_id".intern if configuration[:scope].is_a?(Symbol) && configuration[:scope].to_s !~ /_id$/
-            
+
           if configuration[:scope].is_a?(Symbol)
             scope_condition_method = %(
               def scope_condition
@@ -42,7 +42,7 @@ module Acts #:nodoc:
 
           class_eval <<-EOV
             include Acts::ActiveRecord::AutoIncrement::InstanceMethods
- 
+
 
             def auto_increment_column
               '#{configuration[:column]}'
@@ -69,9 +69,9 @@ module Acts #:nodoc:
               else
                 1
               end
-             
+
           end
-      end 
+      end
     end
   end
 end

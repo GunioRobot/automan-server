@@ -101,7 +101,7 @@ The GLoc module also defines the following controller filters:
 
 GLoc also makes the following change to Rails:
 * Views for ActionMailer are now #{view_name}_#{language}.rb rather than just #{view_name}.rb
-* All ActiveRecord validation class methods now accept a localized string key (symbol) as a :message value. 
+* All ActiveRecord validation class methods now accept a localized string key (symbol) as a :message value.
 * ActiveRecord::Errors.add now accepts symbols as valid message values. At runtime these symbols are converted to localized strings using the current_language of the base record.
 * ActiveRecord::Errors.add now accepts arrays as arguments so that printf-style strings can be generated at runtime. This also applies to the validates_* class methods.
     Eg. validates_xxxxxx_of :name, :message => ['Your name must be at least %d characters.', MIN_LEN]
@@ -179,7 +179,7 @@ GLoc includes the following helpers:
   l_YesNo(value)         # Returns localized string of "Yes" or "No" depending on the arg
   l_yesno(value)         # Returns localized string of "yes" or "no" depending on the arg
 
-=== Rails localization  
+=== Rails localization
 
 Not all of Rails is covered but the following functions are:
   distance_of_time_in_words

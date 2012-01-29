@@ -6,9 +6,9 @@ class ApplicationController < ActionController::Base
   layout :tam_layout
   before_filter :set_current_user
   layout :automan_layout
-  
+
 protected
-  
+
   def automan_layout
     if request.xhr?
       'ajax'
@@ -18,12 +18,12 @@ protected
   end
 
   def replace_with_facebox(id, replace_with_options)
- 		replace_with = render_to_string(replace_with_options.reverse_merge(:layout=>false)) 
+ 		replace_with = render_to_string(replace_with_options.reverse_merge(:layout=>false))
 		render(:update){|page|page.replace(id, replace_with)}
 	end
-	
-	def set_current_user  	
+
+	def set_current_user
     User.current = User.find_by_login("admin")
   end
-  
+
 end

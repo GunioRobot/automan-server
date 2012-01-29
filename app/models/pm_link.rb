@@ -12,21 +12,21 @@ class PmLink < ActiveRecord::Base
   #pm_model_id of linked lib
   belongs_to :model, :class_name => "PmModel", :dependent => :destroy
   belongs_to :pm_lib, :class_name => "PmLib", :foreign_key => "project_id"
-  
+
   #pm_model_id of Base lib
   belongs_to :bm, :class_name => "PmModel"
-  
+
   #pm_model_version_id of Base lib when edited in project
   belongs_to :bm_version, :class_name => "PmVersion"
   belongs_to :user
-  
+
   before_destroy do |record|
     if record.bm.not_imported?
        record.bm.destroy
     end
-    
+
   end
-  
+
   def create_project_copy
     new_model = bm.attributes.except("created_at", "updated_at", "not_imported", "pm_lib_id")
     new_model["pm_lib_id"] = self.project_id
@@ -38,12 +38,12 @@ class PmLink < ActiveRecord::Base
     end
     record
   end
-  
+
   EDIT_STATUS = {:new => "项目中新建", :edit => "项目中编辑", :link => "项目中引用" }
   def status_text
    EDIT_STATUS[status]
   end
-  
+
   def status
     if edited?
       :edit
@@ -53,29 +53,29 @@ class PmLink < ActiveRecord::Base
       :link
     end
   end
-  
+
   def model_in_project
-    (self.status == :edit) ? model : bm 
+    (self.status == :edit) ? model : bm
   end
-  
+
   def current_model
   	edited? ? model : bm
   end
-  
+
   def edited?
   	model
   end
-    
+
   class Maker
     attr_accessor :pages
     attr_accessor :pm_lib
-    
+
     def initialize(pages, pm_lib)
       assert pm_lib!=PmLib::BASE
       @pages = pages
       @pm_lib = pm_lib
     end
-    
+
     # make the initialized link
     def make_init!
       exists = []
@@ -90,6 +90,6 @@ class PmLink < ActiveRecord::Base
       end
       exists
     end
-    
+
   end
 end

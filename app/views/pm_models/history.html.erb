@@ -1,6 +1,6 @@
 <h2>>> <%= link_to "返回到: #{@pm_model.name}", pm_model_path(@pm_model) %></h2>
 <script type="text/javascript" charset="utf-8">
-	
+
 	 jQuery(document).ready(function($) {
 		 $("#diff-submit").click(function(){
 			var url = '<%= pm_model_version_path(@pm_model,"diff") %>'
@@ -18,7 +18,7 @@
 <thead><tr>
     <th>#</th>
     <th></th>
-    <th></th>    
+    <th></th>
     <th><%= l(:field_updated_on) %></th>
     <th><%= l(:field_author) %></th>
     <th><%= l(:field_comments) %></th>

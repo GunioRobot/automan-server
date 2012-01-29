@@ -5,13 +5,13 @@ require 'date'
 module ActionView #:nodoc:
   module Helpers #:nodoc:
     module DateHelper
-    
+
       unless const_defined?(:LOCALIZED_HELPERS)
-        LOCALIZED_HELPERS= true 
+        LOCALIZED_HELPERS= true
         LOCALIZED_MONTHNAMES = {}
         LOCALIZED_ABBR_MONTHNAMES = {}
       end
-      
+
       # This method uses <tt>current_language</tt> to return a localized string.
       def distance_of_time_in_words(from_time, to_time = 0, include_seconds = false)
         from_time = from_time.to_time if from_time.respond_to?(:to_time)
@@ -30,7 +30,7 @@ module ActionView #:nodoc:
               when 41..59 then l(:actionview_datehelper_time_in_words_minute_less_than)
               else             l(:actionview_datehelper_time_in_words_minute)
             end
-                                
+
           when 2..45      then lwr(:actionview_datehelper_time_in_words_minute, distance_in_minutes)
           when 46..90     then l(:actionview_datehelper_time_in_words_hour_about_single)
           when 90..1440   then lwr(:actionview_datehelper_time_in_words_hour_about, (distance_in_minutes.to_f / 60.0).round)
@@ -53,7 +53,7 @@ module ActionView #:nodoc:
 
         select_html(options[:field_name] || 'day', day_options, options[:prefix], options[:include_blank], options[:discard_type], options[:disabled])
       end
-      
+
       # This method has been modified so that
       # * the month names are localized.
       # * it uses options: <tt>:min_date</tt>, <tt>:max_date</tt>, <tt>:start_month</tt>, <tt>:end_month</tt>
@@ -63,10 +63,10 @@ module ActionView #:nodoc:
           LOCALIZED_MONTHNAMES[current_language] = [''] + l(:actionview_datehelper_select_month_names).split(',')
           LOCALIZED_ABBR_MONTHNAMES[current_language] = [''] + l(:actionview_datehelper_select_month_names_abbr).split(',')
         end
-        
+
         month_options = []
         month_names = options[:use_short_month] ? LOCALIZED_ABBR_MONTHNAMES[current_language] : LOCALIZED_MONTHNAMES[current_language]
-        
+
         if options.has_key?(:min_date) && options.has_key?(:max_date)
           if options[:min_date].year == options[:max_date].year
             start_month, end_month = options[:min_date].month, options[:max_date].month
@@ -93,7 +93,7 @@ module ActionView #:nodoc:
 
         select_html(options[:field_name] || 'month', month_options, options[:prefix], options[:include_blank], options[:discard_type], options[:disabled])
       end
-      
+
       # This method has been modified so that
       # * it uses options: <tt>:min_date</tt>, <tt>:max_date</tt>
       # * a localized string can be appended to the years numbers.
@@ -130,21 +130,21 @@ module ActionView #:nodoc:
         select_html << "</select>\n"
       end
     end
-    
+
     # The private method <tt>add_options</tt> is overridden so that "Please select" is localized.
     class InstanceTag
       private
-      
+
       def add_options(option_tags, options, value = nil)
         option_tags = "<option value=\"\"></option>\n" + option_tags if options[:include_blank]
-        
+
         if value.blank? && options[:prompt]
           ("<option value=\"\">#{options[:prompt].kind_of?(String) ? options[:prompt] : l(:actionview_instancetag_blank_option)}</option>\n") + option_tags
          else
           option_tags
         end
       end
-      
+
     end
   end
 end

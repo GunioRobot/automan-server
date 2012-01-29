@@ -166,15 +166,15 @@ pre code	{ display:block; margin-left:20px; padding:10px; font-size:90%; backgro
 
 .popup {min-width: none !important; }
 
-.popup #content { 
+.popup #content {
 	min-height: none !important;
-	min-width:none !important; 	
-} 
+	min-width:none !important;
+}
 
-.popup #content { 
+.popup #content {
 	height: auto;
-	min-width:none; 
-} 
+	min-width:none;
+}
 
 
 #log{
@@ -182,7 +182,7 @@ pre code	{ display:block; margin-left:20px; padding:10px; font-size:90%; backgro
 		overflow:scroll;
 }
 #popup-content{
-	
+
 }
 .fieldWithErrors {
   padding: 1px;
@@ -318,7 +318,7 @@ blockquote blockquote { margin-left: 0;}
 textarea.wiki-edit { width: 99%; }
 li p {margin-top: 0;}
 p.breadcrumb { margin: 4px 0 4px 0;}
-p.subtitle { font-size: 0.9em; margin: -6px 0 12px 0; font-style: italic; } 
+p.subtitle { font-size: 0.9em; margin: -6px 0 12px 0; font-style: italic; }
 p.footnote { font-size: 0.9em; margin-top: 0px; margin-bottom: 0px; }
 
 fieldset#filters, fieldset#date-range { padding: 0.7em; margin-bottom: 8px; }
@@ -347,7 +347,7 @@ div#activity dd span.description, #search-results dd span.description { display:
 div#search-results-counts {float:right;}
 div#search-results-counts ul { margin-top: 0.5em; }
 div#search-results-counts  li { list-style-type:none; float: left; margin-left: 1em; }
-  
+
 dt.issue { background-image: url(/images/automan/ticket.png); }
 dt.issue-edit { background-image: url(/images/automan/ticket_edit.png); }
 dt.issue-closed { background-image: url(/images/automan/ticket_checked.png); }
@@ -408,7 +408,7 @@ font-weight: bold;
 float: left;
 text-align: right;
 margin-left: -180px; /*width of left column*/
-width: 175px; /*width of labels. Should be smaller than left column to create some right 
+width: 175px; /*width of labels. Should be smaller than left column to create some right
 margin*/
 }
 
@@ -646,7 +646,7 @@ background-image:url('/images/automan/close_hl.png');
 }
 
 .task_late { background:#f66 url(/images/automan/task_late.png); border: 1px solid #f66; }
-.task_done { background:#66f url(/images/automan/task_done.png); border: 1px solid #66f; }  
+.task_done { background:#66f url(/images/automan/task_done.png); border: 1px solid #66f; }
 .task_todo { background:#aaa url(/images/automan/task_todo.png); border: 1px solid #aaa; }
 .milestone { background-image:url(/images/automan/milestone.png); background-repeat: no-repeat; border: 0; }
 
@@ -715,7 +715,7 @@ vertical-align: middle;
 .icon22-settings { background-image: url(/images/automan/22x22/settings.png); }
 .icon22-plugin { background-image: url(/images/automan/22x22/plugin.png); }
 
-img.gravatar { 
+img.gravatar {
 	padding: 2px;
   border: solid 1px #d5d5d5;
   background: #fff;

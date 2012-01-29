@@ -5,47 +5,47 @@ class PmModel < ActiveRecord::Base
    include Ownerable::ARExt
    attr_accessor :xml_string
 	 include Pm::AttrChangeAutoTrack
-	 include Pm::Parse 
+	 include Pm::Parse
 	 include Pm::CheckDoubleQuotes
 	 check_double_quotes :name,:title, :url
    named_scope :imported, lambda { |imported| {:conditions => (imported ? 'not_imported is null' : 'not_imported is not null')}}
 
 	 has_many :pm_links, :foreign_key => "bm_id" , :dependent=>:delete_all, :extend => PmLink::Extension
 	 has_one :project_pm_link, :class_name => "PmLink", :foreign_key => "model_id", :dependent=>:nullify
-   has_many :versions, :class_name =>"PmVersion", :foreign_key => "model_id",   :order => "number desc", :dependent => :delete_all 
+   has_many :versions, :class_name =>"PmVersion", :foreign_key => "model_id",   :order => "number desc", :dependent => :delete_all
    belongs_to :pm_folder
    belongs_to :pm_lib
-   belongs_to :owners                 	 
-   has_many :pm_elements, :dependent => :delete_all 
+   belongs_to :owners
+   has_many :pm_elements, :dependent => :delete_all
    has_one  :element_root, :class_name => "PmElement", :conditions=>{:parent_id=>nil}
    validates_uniqueness_of :name, :scope => [:pm_folder_id, :pm_lib_id]
    validates_presence_of :name, :title, :pm_folder_id
    validates_format_of :name, :with => /^[A-Z]+[a-zA-Z0-9_]*$/, :message => "必须是合法的ruby class名称（首字母大写，字母开头， 只包含字母数字和下划线）"
    validates_format_of :url, :with => /(^$)|(^(http|https):\/\/)/ix
- 
+
    typed_serialize :properties, OpenStruct
 
-   
+
    has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
    before_validation do |record|
     if !record.name.blank?
      	tracking_hash = {"name"=>record.name.dup}
-    	record.name = record.name.camelize if record.name  		
+    	record.name = record.name.camelize if record.name
   		record.set_track_change_warning(tracking_hash)
   	end
    end
-   
+
    # 1. create Root element
-   # 2. 
+   # 2.
    #Must after
    after_create do |record|
      record.build_element_root(:name=>"Root", :title=>"Root", :leaf=>false).save_without_validation!
      record.create_first_version_if_needs! if Pm::TrackVersion.track_version?
-   end  
-   
+   end
+
    track_version
- 
+
    #第一级lock，不允许删除／修改名称
    def leve_1_locked?(pm_lib=self.pm_lib)
     return nil if self.not_imported
@@ -57,44 +57,44 @@ class PmModel < ActiveRecord::Base
       return "已被锁定，不能更名"
     end
    end
-  
+
    def folder_trace
      self.pm_folder.ancestors.reverse.push(self.pm_folder)
-   end  
-    
+   end
+
    def namespaces
      self.pm_folder.namespaces.map{|e|e.name}
    end
-   
+
    def full_xml
    		versions.first.xml
    end
-   
+
    def current_version
     versions.first
    end
-   
+
 	 def clear_xml_cache
 	  Rails.cache.delete(xml_cache_key)
 	 end
-	  
+
 	 def xml_cache_key
 	   "data/pm_model/xml/#{self.id}"
 	 end
-   
+
    def win32?
    	 pm_folder&&(pm_folder.win32?||pm_folder.parent_win32?)
    end
-   
+
    def base?
      pm_lib.base?
    end
-   
+
    def bm
     assert !base?
     project_pm_link.bm
    end
-   
+
    def current_pm_lib
      if not_imported?
        pm_links.first.pm_lib
@@ -102,7 +102,7 @@ class PmModel < ActiveRecord::Base
        pm_lib||pm_folder.pm_lib
      end
    end
-   
+
    def merge_not_imported!
      assert not_imported?
      pm_lib_id = not_imported
@@ -110,14 +110,14 @@ class PmModel < ActiveRecord::Base
      save!
      PmLib.find(pm_lib_id).increase_version_clear_cache
    end
-   
+
    def merge_without_change
      assert !self.base?
      self.class.transaction do
        self.destroy
      end
    end
-   
+
    def merge_to_base(xml)
     assert !self.base?
     self.class.transaction do
@@ -125,15 +125,15 @@ class PmModel < ActiveRecord::Base
       self.destroy
     end
    end
-   
-   
+
+
    def import_xml(xml=xml_string,save=true)
      if save
        PmElement.delete_all(["pm_model_id = ? and parent_id is not null",self.id])
      end
      XmlImporter.new(xml,self,{:save=>save}).import
    end
-   
+
    def create_in_project
       project = self.pm_lib
       assert !project.base?
@@ -146,18 +146,18 @@ class PmModel < ActiveRecord::Base
       end
       return ok
    end
-   
+
    def sync_pm_lib_id_with_folder
      PmModel.update_all("pm_lib_id = #{pm_folder.pm_lib_id}", :id=>self.id)
    end
-    
-   def set_if_not_nil(str, value) 
+
+   def set_if_not_nil(str, value)
    	return if !self[str].blank?
    	self[str] = value
    end
-   
-   
-   
+
+
+
 public
   class FakeIdGenarator
     def self.shared
@@ -166,7 +166,7 @@ public
     def initialize
       @current = 0
     end
-    
+
     def next
       @current+=1
     end
@@ -182,14 +182,14 @@ public
       @g_options = g_options
       @fake_id_genarator = FakeIdGenarator.new
     end
-    
+
     def import(opt={})
       @g_options.merge!(opt)
-   	  container = Pm::Parse::ModelContainer.new(xml_string)  	
+   	  container = Pm::Parse::ModelContainer.new(xml_string)
     	root_model = container.root_model
     	pm_model.set_if_not_nil("name", root_model.type)
     	pm_model.set_if_not_nil("title", root_model.description)
-    	
+
       Pm::TrackVersion.without_track_version do
       	if @g_options[:save]
       	  pm_model.class.transaction{save_all(root_model)}
@@ -204,22 +204,22 @@ public
       end
   	  pm_model
     end
-    
+
     def save_all(root_model)
       if @g_options[:save]
     	  pm_model.save!
     	else
     	  pm_model.id = @fake_id_genarator.next
   	  end
-  	  
+
     	root_model.sub_models.each{|e|import_model(e, pm_model.element_root,:nocheck=>true)}
   	  save_elements(pm_model.element_root,root_model.elements, :nocheck=>true)
     end
-   
-   
 
-    def import_model(model_element, parent, options={}) 	
-    	  model = model_element.refered_model 
+
+
+    def import_model(model_element, parent, options={})
+    	  model = model_element.refered_model
 
     	  assert model
   	    model_to_save = pm_model.pm_elements.build(element_attributes(model_element, :name => model.type))
@@ -227,7 +227,7 @@ public
   	    model_to_save.parent=parent
   	    if model_to_save.title.blank?
   	    	model_to_save.title = "null"
-  	    end 
+  	    end
   	    parent.children << model_to_save
   	    if @g_options[:save]
   	      model_to_save.save!
@@ -251,11 +251,11 @@ public
   				else
   					PmElement::DEFAULT_TYPE
   				end
-  	    	element = pm_model.pm_elements.build(element_attributes(e, {:leaf=>true}, 
+  	    	element = pm_model.pm_elements.build(element_attributes(e, {:leaf=>true},
   	    																				            {:html_type => the_type}))
-	    		element.pm_model = pm_model						            
+	    		element.pm_model = pm_model
 	    		element.parent = model_to_save
-	    		model_to_save.children << element							
+	    		model_to_save.children << element
 	    	  assert element.parent
 	    	  assert element.pm_model
 	    		if @g_options[:save]
@@ -266,18 +266,18 @@ public
     	    	end
   	    	else
         	  element.id = @fake_id_genarator.next
-  	      end											  
+  	      end
   	    end
     end
-    
-    
+
+
      def element_attributes(element, attrbutes={}, properties={})
       	props = properties.reverse_merge(:selector   => element.selector,
-  																		   	:collection   => element.collection, 	   	
-  																		   	:required   => false #TODO zhushi-> taichan, should add this to xml   	 
+  																		   	:collection   => element.collection,
+  																		   	:required   => false #TODO zhushi-> taichan, should add this to xml
   																	 	    )
-  			attrbutes=attrbutes.reverse_merge(:name  => element.name, 
-     	  									 			:title => element.description, 
+  			attrbutes=attrbutes.reverse_merge(:name  => element.name,
+     	  									 			:title => element.description,
      	  												:leaf => false)
      	  attrbutes[:properties] = OpenStruct.new(props)
      	  attrbutes

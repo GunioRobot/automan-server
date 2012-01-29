@@ -122,7 +122,7 @@ table.list td.id { width: 14px; text-align: center;}
 table.list td.checkbox { width: 15px; padding: 0px;}
 
 .popup table.list{
-	min-width:400px;	
+	min-width:400px;
 }
 tr.issue { text-align: center; white-space: nowrap; }
 tr.issue td.subject, tr.issue td.category, td.assigned_to { white-space: normal; }

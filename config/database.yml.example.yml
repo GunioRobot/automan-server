@@ -2,7 +2,7 @@ mysql: &using
   adapter: mysql
   host: 127.0.0.1
   username: root
-  password: 
+  password:
   database: automan
   encoding: utf8
 development:

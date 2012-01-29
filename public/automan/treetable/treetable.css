@@ -16,7 +16,7 @@
   padding: 0;
   zoom: 1; /* IE7 Hack */
 }
- 
+
 .treeTable tr.collapsed td .expander {
   background-image: url(toggle-expand-dark.png);
 }

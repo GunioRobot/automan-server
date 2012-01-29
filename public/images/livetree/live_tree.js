@@ -3,18 +3,18 @@
 // Home page: http://www.epiphyte.ca/code/live_tree.html
 //
 // Copyright (c) 2005-2006 Emanuel Borsboom
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the 
-// "Software"), to deal in the Software without restriction, including 
-// without limitation the rights to use, copy, modify, merge, publish, 
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
 // distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the 
+// persons to whom the Software is furnished to do so, subject to the
 // following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included
 // in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
 // OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
@@ -25,22 +25,22 @@
 
 function LiveTree(id, options) {
     this.id = id;
-    
+
     if (options == null) {
         options = {};
     }
-    
+
     this.dataUrl = options.dataUrl;
     this.cssClass = options.cssClass;
     this.cssStyle = options.cssStyle;
-    this.expandRootItem = (options.expandRootItem == null ? true : options.expandRootItem);	
+    this.expandRootItem = (options.expandRootItem == null ? true : options.expandRootItem);
     this.hideRootItem = (options.hideRootItem == null ? false : options.hideRootItem);
     this.rootItemId = options.rootItemId;
     this.expandItemOnClick = (options.expandItemOnClick == null ? true : options.expandItemOnClick);
     this.initialData = options.initialData;
     this.scroll = (options.scroll == null ? true : options.scroll);
     this.preloadItems = (options.preloadItems == null ? true : options.preloadItems);
-    
+
     this.collapsedItemIconHtml = options.collapsedItemIconHtml;
     this.expandedItemIconHtml = options.expandedItemIconHtml;
     this.leafIconHtml = options.leafIconHtml;
@@ -58,7 +58,7 @@ function LiveTree(id, options) {
     this.onLoadItem = options.onLoadItem;
     this.radioName=options.radioName;
     this.checkboxName = options.checkboxName;
-    
+
     this._root = {};
     this._itemsIndex = {};
     this._activeItemId = null;
@@ -79,7 +79,7 @@ LiveTree.prototype._markItemForUpdateDisplay = function (item) {
         tree._updateItemDisplay = item;
     } else if (tree._updateItemDisplay != item) {
         tree._updateItemDisplay = tree._root;
-    }	
+    }
 }
 
 LiveTree.prototype._getClass = function (suffix) {
@@ -192,9 +192,9 @@ LiveTree.prototype._startPreloads = function (item) {
         //alert("XXX preloading children of " + item.id);
         tree._preloadCount++;
         if (item == tree._root) {
-            tree._requestItem(tree._root.children[0].id, 2, tree._onPreloadItemReceived.bind(tree));	
+            tree._requestItem(tree._root.children[0].id, 2, tree._onPreloadItemReceived.bind(tree));
         } else {
-            tree._requestItem(item.id, 3, tree._onPreloadItemReceived.bind(tree));	
+            tree._requestItem(item.id, 3, tree._onPreloadItemReceived.bind(tree));
         }
         if (LiveTree.DEV_SHOW_PRELOADS) {
             tree._markItemForUpdateDisplay(item);
@@ -220,7 +220,7 @@ LiveTree.prototype._stopLoading = function () {
         if (item.isLoading) {
             item.isLoading = false;
             item.isExpanded = false;
-        }		
+        }
         if (item.children != null) {
             for (var i = 0; i < item.children.length; i++) {
                 recurse(item.children[i]);
@@ -241,7 +241,7 @@ LiveTree.prototype._onItemFailure = function (request) {
 }
 
 LiveTree.prototype._requestItem = function (itemId, depth, onItemCallback, options) {
-    var tree = this;	
+    var tree = this;
     if (options == null) {
         options = {};
     }
@@ -250,7 +250,7 @@ LiveTree.prototype._requestItem = function (itemId, depth, onItemCallback, optio
     var delim = "?";
     if (itemId != null) {
         requestOptions.itemId = itemId;
-        url += delim + "item_id=" + escape(itemId);		
+        url += delim + "item_id=" + escape(itemId);
         delim = "&";
     }
     if (depth != null) {
@@ -277,7 +277,7 @@ LiveTree.prototype._onExpandItemReceived = function (item, requestOptions) {
     item.isLoading = false;
     tree._markItemForUpdateDisplay(item);
     tree._startPreloads();
-    tree._updateDisplay();	
+    tree._updateDisplay();
 }
 
 LiveTree.prototype._onPreloadItemReceived = function (item, requestOptions) {
@@ -289,17 +289,17 @@ LiveTree.prototype._onPreloadItemReceived = function (item, requestOptions) {
     tree._preloadCount--;
     item.isLoading = false;
     for (var i = 0; i < item.children.length; i++) {
-        item.children[i].isLoading = false;		
+        item.children[i].isLoading = false;
     }
     tree._startPreloads();
     tree._markItemForUpdateDisplay(item);
-    tree._updateDisplay();	
+    tree._updateDisplay();
 }
 
 LiveTree.prototype._onClickExpand = function (item) {
     var tree = this;
     var expanded = tree._expandItem(item);
-    tree._updateDisplay();	
+    tree._updateDisplay();
     if (expanded) {
         tree.scrollToItem(item.id);
         if (item.isLoading) {
@@ -319,7 +319,7 @@ LiveTree.prototype._onClickCollapse = function (item) {
     }
     item.isExpanded = false;
     tree._markItemForUpdateDisplay(item);
-    tree._updateDisplay();	
+    tree._updateDisplay();
     if (tree.onCollapseItem != null) {
         tree.onCollapseItem(item);
     }
@@ -333,7 +333,7 @@ LiveTree.prototype._onClickCheckbox = function (item) {
 LiveTree.prototype._onClickItem = function (item) {
     var tree = this;
     if (tree.expandItemOnClick && !item.isExpanded && !item.isLeaf) {
-        tree._onClickExpand(item);		
+        tree._onClickExpand(item);
     }
     if (tree.onClickItem != null && ((tree.allowClickLeaf && item.isLeaf) || (tree.allowClickBranch && !item.isLeaf))) {
         tree.onClickItem(item);
@@ -377,10 +377,10 @@ LiveTree.prototype._renderItemHeading = function (item) {
     if (item.id == tree._activeItemId) {
         extraNameClass = " " + this._getClass("active_item_name");
     }
-		
+
 		var cssClass = this._getClass("item_name");
   	var name_html = '';
-		
+
 		if (item.cssClass){
 			name_html += "<s class='icon "+item.cssClass+"'></s>";
 		}
@@ -414,7 +414,7 @@ LiveTree.prototype._renderItemHeading = function (item) {
     $(tree.id + "_item_heading_" + tree._escapeId(item.id)).innerHTML = html;
     if (!item.isLeaf) {
         if (item.isExpanded) {
-            $(tree.id + '_branch_expand_collapse_link_' + tree._escapeId(item.id)).onclick = function () { tree._onClickCollapse(item); return false }		
+            $(tree.id + '_branch_expand_collapse_link_' + tree._escapeId(item.id)).onclick = function () { tree._onClickCollapse(item); return false }
         } else {
             $(tree.id + '_branch_expand_collapse_link_' + tree._escapeId(item.id)).onclick = function () { tree._onClickExpand(item); return false }
         }
@@ -447,7 +447,7 @@ LiveTree.prototype._hideItemChildren = function (item) {
 
 LiveTree.prototype._updateItemChildren = function (item, afterElem, indentLevel, containerElem) {
     var tree = this;
-    
+
     function doUpdateChild(child) {
         var elem = tree._getItemElement(child.id);
         if (elem == null) {
@@ -470,13 +470,13 @@ LiveTree.prototype._updateItemChildren = function (item, afterElem, indentLevel,
             afterElem = tree._updateItemChildren(child, afterElem, indentLevel + 1, containerElem);
         }
     }
-    
+
     if (!item.isExpanded) {
         tree._hideItemChildren(item);
     } else {
         if (item.isLoaded) {
             tree._hideItem(tree._getLoadingDisplayChild(item));
-            for (var i = 0; i < item.children.length; i++) {	
+            for (var i = 0; i < item.children.length; i++) {
                 doUpdateChild(item.children[i]);
             }
         } else {
@@ -489,9 +489,9 @@ LiveTree.prototype._updateItemChildren = function (item, afterElem, indentLevel,
 
 LiveTree.prototype._getLoadingDisplayChild = function (item) {
     var tree = this;
-    var loadingChild = {id: "___LIVE_TREE_LOADING_" + item.id + "___", 
-                         name: tree._getLoadingItemHtml(), 
-                         children: [], 
+    var loadingChild = {id: "___LIVE_TREE_LOADING_" + item.id + "___",
+                         name: tree._getLoadingItemHtml(),
+                         children: [],
                          isLoadingDisplay: true};
     tree._setItemDerivedAttributes(loadingChild);
     return loadingChild;
@@ -504,7 +504,7 @@ LiveTree.prototype._updateDisplay = function () {
     } else {
         Element.hide(tree.id + "_searching");
     }
-    var updateItem = tree._updateItemDisplay;	
+    var updateItem = tree._updateItemDisplay;
     if (updateItem != null) {
         tree._updateItemDisplay = null;
         if (tree._isRootItem(updateItem)) {
@@ -514,14 +514,14 @@ LiveTree.prototype._updateDisplay = function () {
             tree._updateItemChildren(updateItem, $(tree.id + "_root"), 0, $(tree.id));
         } else {
             tree._renderItemHeading(updateItem);
-            
+
             var indentLevel = 0;
             var parentItem = updateItem;
             while (!tree._isRootItem(parentItem)) {
                 indentLevel++;
                 parentItem = parentItem.parent;
             }
-            
+
             if (updateItem.isLoaded || (updateItem.isLoading && !updateItem.isLoadingBackground)) {
                 tree._updateItemChildren(updateItem, tree._getItemElement(updateItem.id), indentLevel, $(tree.id));
             }
@@ -549,16 +549,16 @@ LiveTree.prototype._checkScrollOnLoad = function () {
         }
     } else {
         tree.scrollToItem(item.id);
-        tree._scrollToItemIdOnLoad = null;		
+        tree._scrollToItemIdOnLoad = null;
     }
 }
 
 LiveTree.prototype._getElementPosition = function (destinationLink) {
     // borrowed from http://www.sitepoint.com/print/scroll-smoothly-javascript
-    var destx = destinationLink.offsetLeft;  
+    var destx = destinationLink.offsetLeft;
     var desty = destinationLink.offsetTop;
     var thisNode = destinationLink;
-    while (thisNode.offsetParent &&  
+    while (thisNode.offsetParent &&
             (thisNode.offsetParent != document.body)) {
         thisNode = thisNode.offsetParent;
         destx += thisNode.offsetLeft;
@@ -614,7 +614,7 @@ LiveTree.prototype._expandItem = function (item) {
     if($('item_'+item.id)&&$('item_'+item.id).disabled){
     	return false
     }
-    
+
     // Make sure all item's parents are expanded as well
     var didExpand = false;
     var parent = item.parent;
@@ -625,7 +625,7 @@ LiveTree.prototype._expandItem = function (item) {
             didExpand = true;
         }
         parent = parent.parent;
-    }	
+    }
 
     // Expand the selected item
     var needToLoad = false;
@@ -639,13 +639,13 @@ LiveTree.prototype._expandItem = function (item) {
         tree._markItemForUpdateDisplay(item);
         didExpand = true;
     }
-    
+
     // If the item has not loaded, load it now
     if (needToLoad) {
-        tree._requestItem(item.id, 2, tree._onExpandItemReceived.bind(tree));	
-    }	
+        tree._requestItem(item.id, 2, tree._onExpandItemReceived.bind(tree));
+    }
 
-    tree._startPreloads();	
+    tree._startPreloads();
     return didExpand;
 }
 
@@ -654,7 +654,7 @@ LiveTree.prototype._onExpandItemParentsReceived = function (item, requestOptions
     var requestedItem = tree._getItem(requestOptions.itemId);
     this._expandItem(requestedItem);
     tree._startPreloads();
-    tree._updateDisplay();	
+    tree._updateDisplay();
 }
 
 LiveTree.prototype.expandItem = function (itemId) {
@@ -670,7 +670,7 @@ LiveTree.prototype.expandItem = function (itemId) {
     tree._updateDisplay();
     if (search) {
         tree._scrollTo(0);
-        tree._scrollToItemIdOnLoad = itemId;		
+        tree._scrollToItemIdOnLoad = itemId;
         tree._scrollToItemMustBeExpanded = false;
     } else {
         tree.scrollToItem(itemId);
@@ -683,7 +683,7 @@ LiveTree.prototype._onExpandParentsOfItemReceived = function (item, requestOptio
     var requestedItem = tree._getItem(requestOptions.itemId);
     tree._expandItem(requestedItem.parent);
     tree._startPreloads();
-    tree._updateDisplay();	
+    tree._updateDisplay();
 }
 
 LiveTree.prototype.expandParentsOfItem = function (itemId) {
@@ -699,7 +699,7 @@ LiveTree.prototype.expandParentsOfItem = function (itemId) {
     tree._updateDisplay();
     if (search) {
         tree._scrollTo(0);
-        tree._scrollToItemIdOnLoad = itemId;		
+        tree._scrollToItemIdOnLoad = itemId;
         tree._scrollToItemMustBeExpanded = false;
     } else {
         tree.scrollToItem(itemId);
@@ -723,7 +723,7 @@ LiveTree.prototype.activateItem = function (itemId) {
 }
 
 LiveTree.prototype.getHtml = function() {
-    var tree = this;	
+    var tree = this;
     var html = '';
     html += '<div id="' + tree.id + '" class="' + tree._getClass("") + '"';
     if (tree.cssStyle != null) {
@@ -759,7 +759,7 @@ LiveTree.prototype._addNewItems = function (newItem) {
     var tree = this;
     var oldItem = tree._getItem(newItem.id);
     if (newItem.children != null && oldItem != null) {
-        if (!oldItem.isLoaded) {		
+        if (!oldItem.isLoaded) {
             // Old item has been seen, but its children were not loaded.
             // New item does have children, so add the children to the old item and flag it as as loaded.
             oldItem.children = newItem.children;
@@ -788,10 +788,10 @@ LiveTree.prototype._onItemResponse = function (request, onItemCallback, requestO
         tree._stopLoading();
         return;
     }
-    
+
     if (requestOptions.initialRequest) {
         tree._handleInitialItem(item);
-    } else {	
+    } else {
         var oldItem = tree._addNewItems(item);
         if (oldItem == null) {
             alert("LiveTree error: cannot add received item to tree");
@@ -812,7 +812,7 @@ LiveTree.prototype._onInitialItemReceived = function () {
     tree._root.isExpanded = true;
     tree._markItemForUpdateDisplay(tree._root);
     tree._startPreloads();
-    tree._updateDisplay();		
+    tree._updateDisplay();
 }
 
 LiveTree.prototype._handleInitialItem = function (item) {
@@ -823,7 +823,7 @@ LiveTree.prototype._handleInitialItem = function (item) {
 }
 
 LiveTree.prototype.start = function() {
-    var tree = this;	
+    var tree = this;
     if (tree.initialData != null) {
         tree._handleInitialItem(tree.initialData);
         tree._onInitialItemReceived(tree.initialData);
@@ -833,7 +833,7 @@ LiveTree.prototype.start = function() {
 }
 
 LiveTree.prototype.render = function () {
-    var tree = this;	
+    var tree = this;
     document.write(tree.getHtml());
     tree.start();
 }

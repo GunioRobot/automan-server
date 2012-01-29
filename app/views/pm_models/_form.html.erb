@@ -2,7 +2,7 @@
 	<%= hidden_field_tag "pm_model[pm_lib_id]",  params[:pm_lib_id]%>
 <% end %>
 <% if local_assigns[:f]%>
-	<%= f.error_messages %>   
+	<%= f.error_messages %>
 	<p>名称: <%= f.text_field :name %> <br /> 比如: LoginPage,  SubmitAuctionPage, AuctionDetailPage </p>
 	<p>说明: <%= f.text_field :title %> </p>
 	<% unless @pm_model.win32? %>
@@ -14,7 +14,7 @@
 	<% unless @pm_model.win32? %>
 		<p>URL : <%= text_field_tag "pm_model[url]" %> 以http:// 或者https 开头  </p>
 	<% end %>
-	
+
 	<p>
     <%= submit_tag 'Create' %>
   </p>

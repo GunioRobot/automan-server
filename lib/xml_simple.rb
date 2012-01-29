@@ -22,7 +22,7 @@ class XmlSimple
     end
 
     # Saves a data structure into a file.
-    # 
+    #
     # data::
     #   Data structure to be saved.
     # filename::
@@ -121,7 +121,7 @@ class XmlSimple
   @@cache = Cache.new
 
   # Creates and intializes a new XmlSimple object.
-  # 
+  #
   # defaults::
   #   Default values for options.
   def initialize(defaults = nil)
@@ -142,7 +142,7 @@ class XmlSimple
   #   - filename: Tries to load and parse filename.
   #   - IO object: Reads from object until EOF is detected and parses result.
   #   - XML string: Parses string.
-  #   
+  #
   # options::
   #   Options to be used.
   def xml_in(string = nil, options = nil)
@@ -181,7 +181,7 @@ class XmlSimple
             return content if content
           }
         end
-        
+
         @doc = load_xml_file(filename)
       end
     elsif string.kind_of?(IO) || string.kind_of?(StringIO) || string.kind_of?(Zlib::GzipReader)
@@ -201,7 +201,7 @@ class XmlSimple
     xml_simple = XmlSimple.new
     xml_simple.xml_in(string, options)
   end
-  
+
   # Converts a data structure into an XML document.
   #
   # ref::
@@ -257,7 +257,7 @@ class XmlSimple
     xml_simple = XmlSimple.new
     xml_simple.xml_out(hash, options)
   end
-  
+
   private
 
   # Declare options that are valid for xml_in and xml_out.
@@ -284,7 +284,7 @@ class XmlSimple
   DEF_FORCE_ARRAY     = true
   DEF_INDENTATION     = '  '
   DEF_KEY_TO_SYMBOL   = false
-  
+
   # Normalizes option names in a hash, i.e., turns all
   # characters to lower case and removes all underscores.
   # Additionally, this method checks, if an unknown option
@@ -307,9 +307,9 @@ class XmlSimple
     }
     result
   end
-  
+
   # Merges a set of options with the default options.
-  # 
+  #
   # direction::
   #  'in':  If options should be handled for xml_in.
   #  'out': If options should be handled for xml_out.
@@ -495,9 +495,9 @@ class XmlSimple
         end
       }
     end
-    
+
     # Fold Hashes containing a single anonymous Array up into just the Array.
-    if count == 1 
+    if count == 1
       anonymoustag = @options['anonymoustag']
       if result.has_key?(anonymoustag) && result[anonymoustag].instance_of?(Array)
         return result[anonymoustag]
@@ -537,7 +537,7 @@ class XmlSimple
   end
 
   # Folds all arrays in a Hash.
-  # 
+  #
   # hash::
   #   Hash to be folded.
   def fold_arrays(hash)
@@ -585,7 +585,7 @@ class XmlSimple
     hash = collapse_content(hash) if @options['collapseagain']
     hash
   end
-  
+
   # Folds an Array to a Hash, if possible. Folding happens
   # according to the content of keyattr, which has to be
   # a Hash.
@@ -628,7 +628,7 @@ class XmlSimple
     }
     hash
   end
-  
+
   # Adds a new key/value pair to an existing Hash. If the key to be added
   # does already exist and the existing value associated with key is not
   # an Array, it will be converted into an Array. Then the new value is
@@ -648,7 +648,7 @@ class XmlSimple
       unless @_var_values.nil? || @_var_values.empty?
         value.gsub!(/\$\{(\w+)\}/) { |x| get_var($1) }
       end
-      
+
       # look for variable definitions
       if @options.has_key?('varattr')
         varattr = @options['varattr']
@@ -657,14 +657,14 @@ class XmlSimple
         end
       end
     end
-    
+
     #patch for converting keys to symbols
     if @options.has_key?('keytosymbol')
       if @options['keytosymbol'] == true
         key = key.to_s.downcase.to_sym
       end
     end
-    
+
     if hash.has_key?(key)
       if hash[key].instance_of?(Array)
         hash[key] << value
@@ -682,7 +682,7 @@ class XmlSimple
     end
     hash
   end
-  
+
   # Checks, if the 'forcearray' option has to be used for
   # a certain key.
   def force_array?(key)
@@ -690,13 +690,13 @@ class XmlSimple
     return true if @options['forcearray'] == true
     forcearray = @options['forcearray']
     if forcearray.instance_of?(Hash)
-      return true if forcearray.has_key?(key) 
+      return true if forcearray.has_key?(key)
       return false unless forcearray.has_key?('_regex')
       forcearray['_regex'].each { |x| return true if key =~ x }
     end
     return false
   end
-  
+
   # Converts the attributes array of a document node into a Hash.
   # Returns an empty Hash, if node has no attributes.
   #
@@ -711,7 +711,7 @@ class XmlSimple
     end
     attributes
   end
-  
+
   # Determines, if a document element has mixed content.
   #
   # element::
@@ -722,7 +722,7 @@ class XmlSimple
     end
     false
   end
-  
+
   # Called when a variable definition is encountered in the XML.
   # A variable definition looks like
   #    <element attrname="name">value</element>
@@ -740,7 +740,7 @@ class XmlSimple
       return "${#{name}}"
     end
   end
-  
+
   # Recurses through a data structure building up and returning an
   # XML representation of that structure as a string.
   #
@@ -782,7 +782,7 @@ class XmlSimple
           end
         }
       end
-      
+
       nested = []
       text_content = nil
       if named
@@ -858,10 +858,10 @@ class XmlSimple
     @ancestors.pop if !scalar(ref)
     result.join('')
   end
-  
+
   # Checks, if a certain value is a "scalar" value. Whatever
   # that will be in Ruby ... ;-)
-  # 
+  #
   # value::
   #   Value to be checked.
   def scalar(value)
@@ -872,9 +872,9 @@ class XmlSimple
   # Attempts to unfold a hash of hashes into an array of hashes. Returns
   # a reference to th array on success or the original hash, if unfolding
   # is not possible.
-  # 
+  #
   # parent::
-  #   
+  #
   # hashref::
   #   Reference to the hash to be unfolded.
   def hash_to_array(parent, hashref)
@@ -891,7 +891,7 @@ class XmlSimple
     }
     arrayref
   end
-  
+
   # Replaces XML markup characters by their external entities.
   #
   # data::
@@ -899,7 +899,7 @@ class XmlSimple
   def escape_value(data)
     Text::normalize(data)
   end
-  
+
   # Removes leading and trailing whitespace and sequences of
   # whitespaces from a string.
   #
@@ -924,7 +924,7 @@ class XmlSimple
         return value.nil?
     end
   end
-  
+
   # Converts a document node into a String.
   # If the node could not be converted into a String
   # for any reason, default will be returned.
@@ -934,7 +934,7 @@ class XmlSimple
   # default::
   #   Value to be returned, if node could not be converted.
   def node_to_text(node, default = nil)
-    if node.instance_of?(REXML::Element) 
+    if node.instance_of?(REXML::Element)
       node.texts.map { |t| t.value }.join('')
     elsif node.instance_of?(REXML::Attribute)
       node.value.nil? ? default : node.value.strip
@@ -957,7 +957,7 @@ class XmlSimple
   def parse(xml_string)
     Document.new(xml_string)
   end
-  
+
   # Searches in a list of paths for a certain file. Returns
   # the full path to the file, if it could be found. Otherwise,
   # an exception will be raised.
@@ -984,14 +984,14 @@ class XmlSimple
     end
     raise ArgumentError, "Could not find <#{filename}> in <#{searchpath.join(':')}>"
   end
-  
+
   # Loads and parses an XML configuration file.
   #
   # filename::
   #   Name of the configuration file to be loaded.
   #
   # The following exceptions may be raised:
-  # 
+  #
   # Errno::ENOENT::
   #   If the specified file does not exist.
   # REXML::ParseException::

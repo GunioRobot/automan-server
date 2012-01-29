@@ -6,7 +6,7 @@ module Acts #:nodoc:
        end
        module ClassMethods
 
-          def live_tree(name, options = {})   
+          def live_tree(name, options = {})
              include InstanceMethods
              raise ":model, :model_class_name, or :find_item_proc option is required" if options[:model] == nil && options[:model_class_name] == nil && options[:find_item_proc] == nil
              if options[:model_class_name] != nil
@@ -29,15 +29,15 @@ module Acts #:nodoc:
              "end\n"
              class_eval code
           end
-       end  
-       
-       module InstanceMethods  
-       
+       end
+
+       module InstanceMethods
+
          def setup_item_type_tree(check_get=false)
         	  return if check_get&&!request.get?
-          	@root=ItemType.root    
+          	@root=ItemType.root
          end
-       
+
          # Returns the value of the item ID from the request's params.
          def live_tree_item_id
              params[:item_id]
@@ -46,9 +46,9 @@ module Acts #:nodoc:
             #Kernel.sleep(10); #XXX
             render :inline => '<%= _get_live_tree_data(item, options, params) %>', :locals => { :item => item, :options => options }
          end
-       end    
-       
-       
+       end
+
+
     end
    end
 end

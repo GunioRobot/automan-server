@@ -7,19 +7,19 @@
 			[]
 		end
 	}
-	
+
 	get_item_name_proc = Proc.new{|e|e.name}
-	
+
 	get_item_id_proc = Proc.new{|e|e.is_a?(PmModel) ? e.id : "#{e.name}_#{e.id}"}
-	
+
  %>
 <%= javascript_include_tag "/livetree/live_tree", :cache => true %>
-<% form_tag do %> 
+<% form_tag do %>
 	<%= live_tree :item_type_tree, {
                     :css_style => "float:none;height:auto;width:auto;",
                     #:id => "foo_tree",
                     #:js_variable_name => "fooBar",
-              
+
                     #:data_url => { :action => "baz" },
                     #:data_controller => "bar",
                     #:data_action => "foo",
@@ -37,7 +37,7 @@
                     #:hide_root_item => true,
                     #:scroll => false,
                     :preload_items => false,
-                  
+
                     #:on_click_item => "areaTreeOnClickItem(this, item.id, item.isLeaf, item.isLeaf ? item.parent.id : item.id)",
                     :allow_click_leaf => false,
                     #:allow_click_branch => false,

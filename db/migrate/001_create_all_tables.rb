@@ -60,11 +60,11 @@ class CreateAllTables < ActiveRecord::Migration
        t.datetime "created_at"
        t.datetime "updated_at"
      end
-     
+
      add_index "pm_links", ["project_id"], :name => "project_id"
      add_index "pm_links", ["model_id"], :name => "model_id"
      add_index "pm_links", ["bm_id"], :name => "bm_id"
-     
+
      create_table "pm_models", :force => true do |t|
        t.string   "name"
        t.string   "title"
@@ -81,11 +81,11 @@ class CreateAllTables < ActiveRecord::Migration
        t.integer  "not_imported"
        t.integer  "pm_lib_id"
      end
-     
+
      add_index "pm_models", ["pm_folder_id"], :name => "pm_folder_id"
      add_index "pm_models", ["pm_lib_id"], :name => "pm_lib_id"
      add_index "pm_models", ["not_imported"], :name => "not_imported"
-     
+
 
      create_table "pm_versions", :force => true do |t|
        t.integer  "model_id",   :null => false
@@ -100,7 +100,7 @@ class CreateAllTables < ActiveRecord::Migration
 
      add_index "pm_versions", ["model_id"], :name => "model_id"
      add_index "pm_versions", ["model_id","number"], :name => "model_id_number"
-     
+
      create_table "user_favs", :force => true do |t|
        t.integer  "user_id"
        t.integer  "object_id"
@@ -133,7 +133,7 @@ class CreateAllTables < ActiveRecord::Migration
      add_index "users", ["login"], :name => "login", :unique => true
      create_init_data
   end
-  
+
   def self.create_init_data
     now = Time.now.to_s(:db)
     ActiveRecord::Base.connection.execute("INSERT INTO `pm_libs` (`id`,`name`,`title`,`owner_id`,`project_id`,`created_at`,`updated_at`) VALUES (15, 'Base', '基线库', NULL, NULL, '#{now}', '#{now}');")

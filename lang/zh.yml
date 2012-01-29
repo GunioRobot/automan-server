@@ -486,7 +486,7 @@ label_query_plural: 自定义查询
 label_query_new: 新建查询
 label_filter_add: 增加过滤器
 label_filter_plural: 过滤器
-label_test_plan: 测试计划 
+label_test_plan: 测试计划
 label_equals: 等于
 label_not_equals: 不等于
 label_in_less_than: 剩余天数小于

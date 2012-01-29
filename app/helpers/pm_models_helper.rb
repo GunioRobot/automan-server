@@ -1,5 +1,5 @@
-module PmModelsHelper 
-  
+module PmModelsHelper
+
   def link_to_delete_base_pm_model(model)
     if model.pm_links.size > 0
       ""
@@ -7,7 +7,7 @@ module PmModelsHelper
       link_to "删除" ,pm_model_path(model, :project=>@pm_lib), :confirm => '您确定要删除?', :method => :delete
     end
   end
-  
+
   def pm_folder_options_for_select(pm_lib, options = {})
     s = ''
     if options[:include_blank]
@@ -20,7 +20,7 @@ module PmModelsHelper
       s << content_tag('option', name_prefix + h(pm_element.name), tag_options)
     end
     s
-  end 
+  end
 
 
   def pm_model_options_for_select(pm_lib, value)
@@ -29,8 +29,8 @@ module PmModelsHelper
     option_groups_from_collection_for_select(group,:pm_models,:group_name,:id, :name , value)
   end
 
-  
-  
+
+
   def pm_element_options_for_select(pm_model, options = {})
     s = ''
     traval_tree(pm_model.element_root, options.slice(:stop_object)) do |pm_element, level|
@@ -40,22 +40,22 @@ module PmModelsHelper
       s << content_tag('option', name_prefix + h(pm_element.name), tag_options)
     end
     s
-  end 
-  
-  
+  end
+
+
   class PmOption
     attr_reader :group_name, :pm_models
     def initialize(group_name, pm_models)
       @group_name = group_name
       @pm_models = pm_models
     end
-    
-    
+
+
   end
-  
+
   #PmModel & pm_link status
   def link_to_pm_model_link_status(pm_model)
-  	if pm_model.not_imported? 
+  	if pm_model.not_imported?
   		"项目中新建"
 		else
 			if(count = pm_model.pm_links.count) > 0
@@ -63,10 +63,10 @@ module PmModelsHelper
 			else
 				"无"
 			end
-			
-		end  	
+
+		end
   end
-  
+
   def tree_options_for_select(root, options={})
     s = ''
     value_key = options[:value_key]||"id"
@@ -77,24 +77,24 @@ module PmModelsHelper
     end
     s
   end
-  
+
   def traval_tree(element, options={}, &block)
   	return  if options[:stop_object] && element.id == options[:stop_object].id
   	level = options[:level]||0
-  	
+
 		children = if(proc = options[:children_proc])
 		    proc.call(element)
 		  else
 		    element.children
 	    end
-	  
+
     if options[:no_root]&&(element.root?)
       level = -1
     else
       block.call element, level
     end
 
-	    
+
 		if(!children.empty?)
 			children.each{|e|
 			  	traval_tree(e, options.merge(:level => level+1), &block)}

@@ -6,30 +6,30 @@ class PmLibsController < ApplicationController
   def simple_list
     @pm_libs = PmLib.paginate(:page=>params[:page], :per_page=>10)
   end
-  
-  def close 
+
+  def close
     return if request.get?
     @pm_lib.close!
     flash[:notice] = "关闭成功！"
     redirect_to pm_lib_path(@pm_lib)
   end
-  
+
   def revision
   	params[:root_path] ||= "http://svn.test.taobao.net/repos/test-svnrepos/automan/code/share_modules/"
   	conf = Scm::Svn::Client::Config
   	#begin
-  	revision = Scm::Svn::Client.new(params[:root_path]+params[:svn_path],:login=>conf["login"], :password=>conf["password"]).info.lastrev.identifier  	  	
+  	revision = Scm::Svn::Client.new(params[:root_path]+params[:svn_path],:login=>conf["login"], :password=>conf["password"]).info.lastrev.identifier
   	respond_to do |format|
   		format.xml{
   		render :xml => {:revision => revision, :file_url => "http://automan.taobao.net:8001/redmine/projects/tam/repository/raw/share_modules/#{params[:svn_path]}"}.to_xml(:root=>"result")
 			}
   	end
-  	
+
   	#rescue Exception => e
   	#	render :text => 0
-  	#end  	
+  	#end
   end
-  
+
   def monkey_api
     @pm_lib = PmLib.find(params[:pm_lib_id]) if params[:pm_lib_id]
     @pm = PmModel.find(params[:pm_id]) if params[:pm_id]
@@ -39,21 +39,21 @@ class PmLibsController < ApplicationController
   # GET /pm_libs/1
   # GET /pm_libs/1.xml
   def show
-    @folder_root = @pm_lib.folder_root        
+    @folder_root = @pm_lib.folder_root
     respond_to do |format|
       format.html {
         raise "@folder_root is nil" if @folder_root.nil?
         redirect_to pm_lib_pm_folder_path(@pm_lib, @folder_root.id)
       }
-      format.xml{ 
+      format.xml{
         render :xml => @pm_lib.full_xml
       }
     end
 
   end
-  
+
   def fav_folder
-  	
+
   end
 
   # GET /pm_libs/new
@@ -79,7 +79,7 @@ class PmLibsController < ApplicationController
     if @pm_lib.save
       flash[:notice] = '对象库创建成功'
       render(:update){|page|page.redirect_to(@pm_lib) }
-    else 
+    else
     	replace_with_facebox('new_pm_lib', :action=>'new')
     end
   end
@@ -109,13 +109,13 @@ class PmLibsController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
-  
+
+
   def bookmark
-  	
+
   end
-  
-  
+
+
 private
 	def find_one
 		@pm_lib = if params[:id].integer?

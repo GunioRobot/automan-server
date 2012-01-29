@@ -1,4 +1,4 @@
-<% element_root = page_model.element_root 
+<% element_root = page_model.element_root
 	 preview = local_assigns[:preview]
 %>
 <%  page_model_html_id = "page-summery-#{page_model.id}" %>
@@ -8,16 +8,16 @@
  %>
 
 	<script type="text/javascript" charset="utf-8">
-		jQuery(document).ready(function($) { 	  	
+		jQuery(document).ready(function($) {
 		 	  $(".treeTable").treeTable();
 	  	  $(".toogle-all").live("click",function(){
 	  	  	var otherClass = $("#"+$(this).attr("data-id") + " .parent.first-class")
 	  	  	var expanded = false
-	  	  	jQuery.each(otherClass, function() {    	  		 
+	  	  	jQuery.each(otherClass, function() {
 			  	 if($(this).hasClass("expanded")){
 			  	 	expanded = true;
 			  	 	return false
-			  	 }	
+			  	 }
 		  	 	return false
 			  });
 			  var action = function(e){return e.expand()}
@@ -34,7 +34,7 @@
 
 <div style="width:800px; text-align: center"> <h3>页面概览</h3></div>
 <div id="<%= page_model_html_id %>" class="page-summery">
-	
+
 
 <table class="treeTable wikitable" style="font-size: 97%;">
   <thead>
@@ -56,8 +56,8 @@
 	    <tr id="node-<%= e.id %>" class="entry <%= e.parent.id == element_root.id ? "first-class" : "other-class child-of-node-#{e.parent.id}" %>">
 	      	<a class="itemlink" href="<%= preview ? '#' : pm_element_path(e) %>" rel="facebox">
 	      		<span class="icon <%= e.live_tree_item_html_options[:cssClass]%>"></span>
-	      		<span class="live_tree_item_name"><%= e.name  %></span></a>	      		
-	      <td><%= preview ? e.title : inplace_update_attr(e, :title) %></td>                   
+	      		<span class="live_tree_item_name"><%= e.name  %></span></a>
+	      <td><%= preview ? e.title : inplace_update_attr(e, :title) %></td>
 	      <td><%= html_type(e) %></td>
 	      <td><%= preview ? e.properties.selector : inplace_update_attr(e,"properties.selector")%></td>
 	      <td><%= boolean_display e.properties.required %></td>

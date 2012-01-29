@@ -84,7 +84,7 @@ module Automan
                 result.concat(n.need_update(nil))
               end
             }
-          
+
             local_sub.each{|ln|
               sn = self.find_same_name(ln) #查找服务器的节点
               #找不到服务器上的节点
@@ -103,7 +103,7 @@ module Automan
       end
       attr_accessor :project_name, :ref_project_name
       attr_reader :root_path
-      
+
       def get_list(local_node, root_path)
         @root_path = root_path
         return need_update(local_node)

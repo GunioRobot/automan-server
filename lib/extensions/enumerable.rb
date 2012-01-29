@@ -1,7 +1,7 @@
 #
 # == extensions/enumerable.rb
 #
-# Adds methods to the builtin Enumerable module. 
+# Adds methods to the builtin Enumerable module.
 #
 
 require "extensions/_base"
@@ -11,7 +11,7 @@ require "extensions/_base"
 #
 ExtensionsProject.implement(Enumerable, :build_hash) do
   module Enumerable
-  	
+
   	def build_ordered_hash(&block)
   		require "active_support"
       result = ActiveSupport::OrderedHash.new
@@ -25,7 +25,7 @@ ExtensionsProject.implement(Enumerable, :build_hash) do
       end
       result
     end
-  	
+
     #
     # Like <tt>#map</tt>/<tt>#collect</tt>, but it generates a Hash.  The block
     # is expected to return two values: the key and the value for the new hash.
@@ -45,11 +45,11 @@ ExtensionsProject.implement(Enumerable, :build_hash) do
       end
       result
     end
-    
+
     def build_hash_with_index
       result = {}
       self.each_with_index do |elt,index|
-        key, value = yield(elt,index) 
+        key, value = yield(elt,index)
         result[key] = value
       end
       result
@@ -172,11 +172,11 @@ ExtensionsProject.implement(Enumerable, :partition_by) do
     # See Enumerable#partition for the background.  #partition_by is best
     # explained by example.
     #
-    #   (1..5).partition_by { |n| n % 3 } 
-    #        # -> { 0 => [3], 1 => [1, 4], 2 => [2,5] } 
+    #   (1..5).partition_by { |n| n % 3 }
+    #        # -> { 0 => [3], 1 => [1, 4], 2 => [2,5] }
     #
     #   ["I had", 1, "dollar and", 50, "cents"].partition_by { |e| e.class }
-    #        # -> { String => ["I had","dollar and","cents"], Fixnum => [1,50] } 
+    #        # -> { String => ["I had","dollar and","cents"], Fixnum => [1,50] }
     #
     # #partition_by is used to group items in a collection by something they
     # have in common.  The common factor is the key in the resulting hash, the

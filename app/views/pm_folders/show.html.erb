@@ -1,6 +1,6 @@
 <% html_title @pm_lib.base? ? "基线" : "项目：#{@pm_lib.name}"%>
 
-<% content_for :topbar do %> 
+<% content_for :topbar do %>
 <style type="text/css" media="screen">
 	.gbm {
 	    border-color: #C9D7F1 #3366CC #3366CC #A2BAE7;
@@ -15,7 +15,7 @@
 
 <%= render :partial => "top_bar" %>
 <% end %>
-<%= javascript_include_tag '/livetree/live_tree' %>                                   
+<%= javascript_include_tag '/livetree/live_tree' %>
 <% content_for :sidebar do %>
 	 <%= live_tree :folder, {
                   :initial_data_root => @folder_root,
@@ -25,7 +25,7 @@
                   :allow_click_branch => true,
                   :on_click_item => "onClickItem(item.id)"
                   } %>
-     
+
      <script type="text/javascript" charset="utf-8">
       function onClickItem(folderID) {
       	jQuery.get('<%= pm_lib_pm_folders_path(@pm_lib) %>/'+folderID+'?xhr=true', function(data){
@@ -33,7 +33,7 @@
 					jQuery("#topbar").replaceWith(data.top_bar)
 					jQuery("#ajax-indicator").hide()
       	})
-      }          
+      }
 
 
 	 jQuery(document).ready(function($) {
@@ -45,7 +45,7 @@
 			if(!confirm("确实要修改？")){
 				return
 			}
-			
+
 			$("#ajax-indicator").show()
 			var link = $(this)
 			var folderId = link.attr("data-id")
@@ -53,11 +53,11 @@
 				onClickItem(folderId)
 				alert(resp)
 			})
-			
+
 		})
 	 })
   </script>
-<% end %>   
+<% end %>
 
 <div id='list_view'>
     <% unless request.xhr? %>
@@ -66,4 +66,4 @@
 			<h1 style="text-align: center;">请点击左侧"对象树"</h1>
     <%end%>
 </div>
-                                                                           
+

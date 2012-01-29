@@ -22,26 +22,26 @@ module Scanners
           if scan(/\s+/)
             tokens << [matched, :space]
             next
-            
+
           elsif scan(/ (\w+) \( ( [^\)\\]* ( \\. [^\)\\]* )* ) \) /x)
             kind = self[1].to_sym
             match = self[2].gsub(/\\(.)/, '\1')
-            
+
           elsif scan(/ (\w+) < /x)
             kind = self[1].to_sym
             opened_tokens << kind
             match = :open
-            
+
           elsif !opened_tokens.empty? && scan(/ > /x)
             kind = opened_tokens.pop || :error
             match = :close
-            
+
           else
             kind = :error
             getch
 
           end
-                  
+
         match ||= matched
         if $CODERAY_DEBUG and not kind
           raise_inspect 'Error token %p in line %d' %
@@ -50,9 +50,9 @@ module Scanners
         raise_inspect 'Empty token', tokens unless match
 
         tokens << [match, kind]
-        
+
       end
-      
+
       tokens
     end
 

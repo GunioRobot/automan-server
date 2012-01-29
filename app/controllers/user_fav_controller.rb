@@ -1,10 +1,10 @@
 class UserFavController < ApplicationController
   def index
   end
-  
+
   def update
   	@user_fav = UserFav.find(params[:id])
-  	
+
   	if params[:go] == "withdraw"
   		@user_fav.delete
 		else
@@ -13,11 +13,11 @@ class UserFavController < ApplicationController
 		end
 		redirect_to :back
   end
-  
+
   def show
   	@user_fav = UserFav.find(params[:id])
   end
-  
+
   def new
     @favable = params[:clazz].constantize.find(params[:object_id])
     return if request.get?
@@ -29,13 +29,13 @@ class UserFavController < ApplicationController
 		end
 		render :json=>r
   end
-  
+
   private
-  
+
   def save_fav(fav)
   	ok = false
   	text = ""
-  	if fav.new_record?      	
+  	if fav.new_record?
     	if fav.save
     		ok = true
     		text = "收藏成功！"
@@ -45,15 +45,15 @@ class UserFavController < ApplicationController
   	else
   			text = "请不要重复收藏！"
 		end
-		
+
 		{:ok=>ok, :text=>text, :replace=>params[:unjoin_text]||"取消收藏", :repace_go=>"del"}
   end
-  
-  
+
+
   def del_fav(fav)
   	ok = false
   	text = ""
-  	if !fav.new_record?      	
+  	if !fav.new_record?
     	if fav.delete
   			text = "取消成功！"
   			ok = true
@@ -63,7 +63,7 @@ class UserFavController < ApplicationController
   	else
     		text = "您还没有收藏！"
 		end
-		
+
 		{:ok=>ok, :text=>text, :replace=>params[:join_text]||"收藏",:repace_go=>"save"}
   end
 end

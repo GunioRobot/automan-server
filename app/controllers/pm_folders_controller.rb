@@ -1,13 +1,13 @@
 class PmFoldersController < ApplicationController
   # GET /pm_folders
-  # GET /pm_folders.xml                         
+  # GET /pm_folders.xml
   #live_tree :folder, :model => :pm_folder
   before_filter :find_one, :only=>[:export, :show, :destroy, :edit, :export, :update, :delete_preview]
   # GET /pm_folders/1
   # GET /pm_folders/1.xml
   def show
     @pm_lib = params[:pm_lib_id] ?  PmLib.find(params[:pm_lib_id]) : @pm_folder.pm_lib
-    @folder_root = @pm_lib.folder_root  
+    @folder_root = @pm_lib.folder_root
     if !@pm_lib.base?
       if @folder_root.children.empty?
     		return render :action => "show_empty"
@@ -18,37 +18,37 @@ class PmFoldersController < ApplicationController
       list_view = render_to_string(:partial => @pm_lib.base? ?  "show" : "show_in_project")
       top_bar = render_to_string(:partial => "top_bar")
       render :json=>{:list_view=>list_view, :top_bar => top_bar}
-      
+
     else
     	if @pm_folder.nil?
   	     redirect_to pm_lib_pm_folder_path(@pm_lib, @folder_root.id)
   		end
     end
   end
-  
+
   def export
     return if request.get?
     ids = params[:page_ids]
     lib_id = params[:pm_lib_id]
-    
+
     if ids.blank?
-      return raise_error("please check as least one page!") 
+      return raise_error("please check as least one page!")
     end
-    
+
     if lib_id.blank?
-      return raise_error("please choose a target Project Page Model Lib") 
+      return raise_error("please choose a target Project Page Model Lib")
     end
     @pm_lib = PmLib.find(lib_id)
     pages = ids.map{|e|PmModel.find(e)}
     duplicats = PmLink::Maker.new(pages, @pm_lib).make_init!
-    
+
     flash[:notice] = %[成功导入到项目［#{@pm_lib.name}］, #{@template.link_to_pop_page("点击进入", "/pm_libs/#{@pm_lib.id}")}]
     if !duplicats.empty?
       flash[:error] = %[以下Page已经导入该项目中， 分别为：#{duplicats.map{|e|@template.link_to_pop_page(e.model_in_project.name, "/pm_libs/#{@pm_lib.id}/pm_models/#{e.model_in_project.id}")}}]
     end
     redirect_to :action => "show", :id=>@pm_folder
   end
-  
+
   def download_help
   	@pm_folder = PmFolder.find(params[:id])
   end
@@ -71,7 +71,7 @@ class PmFoldersController < ApplicationController
   # POST /pm_folders
   # POST /pm_folders.xml
   def create
-    @pm_folder = PmFolder.new(params[:pm_folder])  
+    @pm_folder = PmFolder.new(params[:pm_folder])
     @pm_folder.pm_lib = @pm_folder.parent.pm_lib
 		if params[:winmodel] == "yes"
 			@pm_folder.folder_type = PmFolder::TYPE_WIN32
@@ -115,11 +115,11 @@ class PmFoldersController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
+
   private
-  
+
   private
-  
+
   def tam_layout
     if super == "application"
       "pm"
@@ -127,12 +127,12 @@ class PmFoldersController < ApplicationController
       super
     end
   end
-  
+
   def raise_error(msg)
     @error = msg
-    return 
+    return
   end
-  
+
   def find_one
     @pm_folder = PmFolder.find(params[:id])
   end

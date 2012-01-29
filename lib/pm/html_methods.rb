@@ -1,6 +1,6 @@
 module Pm::HtmlMethods
 	METHODS_DEF = {:Model    => {:exist? => 0, :empty? => 0, :text => 0 },
-	               :AElement => {:click => 0, :text => 0, :get  => 1, 
+	               :AElement => {:click => 0, :text => 0, :get  => 1,
 															 :get_properties =>0 ,:focus=>0, :visible=>0,
 															 :outer_html=>0,:fire_event=>1 },
         				 :ATextField => {:set => 1, :readonly=>0,  :readonly= => 1},
@@ -12,7 +12,7 @@ module Pm::HtmlMethods
         				 :AlipayPassword => {:set=>1},
         				 :AInnerTextSetElement => {:set=>1}
       				 }
-        				 
+
   class HtmlMethod
     attr_accessor :name, :arg
     def initialize(name,arg)
@@ -27,30 +27,30 @@ module Pm::HtmlMethods
       @name = name
       @_methods = methods.map{|n,args|HtmlMethod.new(n, args)}
     end
-  
+
     def html_methods
       if [:AElement, :Model].include?(self.name.to_sym)
         return @_methods
       else
-        @_methods + self.class.base_type.html_methods 
+        @_methods + self.class.base_type.html_methods
       end
     end
-  
+
     class << self
       attr_reader :register
 
       def base_type
         find_by_name(:AElement)
       end
-    
+
       def submodel_type
         find_by_name(:Model)
       end
-      
+
       def find_by_name(_type)
         register.find{|e|e.name.to_s == _type.to_s}
       end
-    
+
       def __create_register
         @register = Pm::HtmlMethods::METHODS_DEF.map{|k,v|ElementType.new(k,v)}
       end

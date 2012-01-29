@@ -12,5 +12,5 @@ module GLoc
     CONFIG[:raise_string_not_found_errors]= true unless CONFIG.has_key?(:raise_string_not_found_errors)
     CONFIG[:verbose] ||= false
   end
-  
+
 end

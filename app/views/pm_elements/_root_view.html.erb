@@ -1,14 +1,14 @@
-<h3>页面(PageModel)</h3> 
+<h3>页面(PageModel)</h3>
 
-<% remote_form_for(@pm_model) do |f| %>      <%= f.error_messages %>    
+<% remote_form_for(@pm_model) do |f| %>      <%= f.error_messages %>
 	<div class="issue">
 			<% updated_by = @pm_model.updated_by %>
-	
+
 			<table class="attributes">
 					<tr>
 				    <th class="status">命名空间:</th>
-				    	<td colspan="2">	
-				    		<%= text_field_tag(:root,@pm_element.pm_model.namespaces.push(@pm_element.pm_model.name).join("::"),{ :readonly=>true, :style=>"width:70%;"}) %>     
+				    	<td colspan="2">
+				    		<%= text_field_tag(:root,@pm_element.pm_model.namespaces.push(@pm_element.pm_model.name).join("::"),{ :readonly=>true, :style=>"width:70%;"}) %>
 			    		</td>
 			    		<td>
 			    		</td>
@@ -17,7 +17,7 @@
 				    <th>名称(英文):</th><td>
 						<% @locked = @pm_model.leve_1_locked?%>
 						<%= f.text_field :name, :disabled => !@locked.nil?  %> <%= @locked if @locked %></td>
-				    
+
 				    <th>说明(中文): </th><td><%= f.text_field :title  %> </td>
 					</tr>
 					<% unless @pm_model.win32? %>
@@ -34,9 +34,9 @@
 						<% end  %>
 						</th>
 					</tr>
-				</table>	
+				</table>
 	</div>
 <% end -%>
 
-<%= render :partial => "shared/page_model", :object => @pm_model%>   
+<%= render :partial => "shared/page_model", :object => @pm_model%>
 

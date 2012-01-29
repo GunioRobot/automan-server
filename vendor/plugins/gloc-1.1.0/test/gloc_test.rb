@@ -18,7 +18,7 @@ class LClass_ja < LClass2; set_language :ja; end
 class GLocTest < Test::Unit::TestCase
   include GLoc
   include ActionView::Helpers::DateHelper
-  
+
   def setup
     @l1 = LClass.new
     @l2 = LClass.new
@@ -35,26 +35,26 @@ class GLocTest < Test::Unit::TestCase
       :verbose => false,
     })
   end
-  
+
   def teardown
     GLoc.restore_state @gloc_state
   end
-  
+
   #---------------------------------------------------------------------------
-  
+
   def test_basic
     assert_localized_value [nil, @l1, @l2, @l3], nil, :in_both_langs
-    
+
     GLoc.load_localized_strings File.join(File.dirname(__FILE__),'lang')
-    
+
     assert_localized_value [nil, @l1], 'enにもjaにもある', :in_both_langs
     assert_localized_value [nil, @l1], '日本語のみ', :ja_only
     assert_localized_value [nil, @l1], nil, :en_only
-    
+
     assert_localized_value @l2, 'This is in en+ja', :in_both_langs
     assert_localized_value @l2, nil, :ja_only
     assert_localized_value @l2, 'English only', :en_only
-    
+
     assert_localized_value @l3, "Thiz in en 'n' ja", :in_both_langs
     assert_localized_value @l3, nil, :ja_only
     assert_localized_value @l3, 'Aussie English only bro', :en_only
@@ -68,49 +68,49 @@ class GLocTest < Test::Unit::TestCase
     assert_localized_value nil, '日本語のみ', :ja_only
     assert_localized_value nil, nil, :en_only
   end
-  
+
   def test_load_twice_with_override
     GLoc.load_localized_strings File.join(File.dirname(__FILE__),'lang')
     GLoc.load_localized_strings File.join(File.dirname(__FILE__),'lang2')
-    
+
     assert_localized_value [nil, @l1], '更新された', :in_both_langs
     assert_localized_value [nil, @l1], '日本語のみ', :ja_only
     assert_localized_value [nil, @l1], nil, :en_only
     assert_localized_value [nil, @l1], nil, :new_en
     assert_localized_value [nil, @l1], '新たな日本語ストリング', :new_ja
-    
+
     assert_localized_value @l2, 'This is in en+ja', :in_both_langs
     assert_localized_value @l2, nil, :ja_only
     assert_localized_value @l2, 'overriden dude', :en_only
     assert_localized_value @l2, 'This is a new English string', :new_en
     assert_localized_value @l2, nil, :new_ja
-    
+
     assert_localized_value @l3, "Thiz in en 'n' ja", :in_both_langs
     assert_localized_value @l3, nil, :ja_only
     assert_localized_value @l3, 'Aussie English only bro', :en_only
   end
-  
+
   def test_load_twice_without_override
     GLoc.load_localized_strings File.join(File.dirname(__FILE__),'lang')
     GLoc.load_localized_strings File.join(File.dirname(__FILE__),'lang2'), false
-    
+
     assert_localized_value [nil, @l1], 'enにもjaにもある', :in_both_langs
     assert_localized_value [nil, @l1], '日本語のみ', :ja_only
     assert_localized_value [nil, @l1], nil, :en_only
     assert_localized_value [nil, @l1], nil, :new_en
     assert_localized_value [nil, @l1], '新たな日本語ストリング', :new_ja
-    
+
     assert_localized_value @l2, 'This is in en+ja', :in_both_langs
     assert_localized_value @l2, nil, :ja_only
     assert_localized_value @l2, 'English only', :en_only
     assert_localized_value @l2, 'This is a new English string', :new_en
     assert_localized_value @l2, nil, :new_ja
-    
+
     assert_localized_value @l3, "Thiz in en 'n' ja", :in_both_langs
     assert_localized_value @l3, nil, :ja_only
     assert_localized_value @l3, 'Aussie English only bro', :en_only
   end
-  
+
   def test_add_localized_strings
     assert_localized_value nil, nil, :add
     assert_localized_value nil, nil, :ja_only
@@ -128,25 +128,25 @@ class GLocTest < Test::Unit::TestCase
     assert_localized_value nil, '234', :add
     assert_localized_value nil, 'bullshit', :ja_only
   end
-  
+
   def test_class_set_language
     GLoc.load_localized_strings File.join(File.dirname(__FILE__),'lang')
-    
+
     @l1 = LClass_ja.new
     @l2 = LClass_en.new
     @l3 = LClass_en.new
-    
+
     assert_localized_value @l1, 'enにもjaにもある', :in_both_langs
     assert_localized_value @l2, 'This is in en+ja', :in_both_langs
     assert_localized_value @l3, 'This is in en+ja', :in_both_langs
 
     @l3.set_language 'en_AU'
-    
+
     assert_localized_value @l1, 'enにもjaにもある', :in_both_langs
     assert_localized_value @l2, 'This is in en+ja', :in_both_langs
     assert_localized_value @l3, "Thiz in en 'n' ja", :in_both_langs
   end
-  
+
   def test_ll
     GLoc.load_localized_strings File.join(File.dirname(__FILE__),'lang')
 
@@ -160,14 +160,14 @@ class GLocTest < Test::Unit::TestCase
     assert_equal 'This is in en+ja', LClass_en.ll('en',:in_both_langs)
     assert_equal 'This is in en+ja', LClass_ja.ll('en',:in_both_langs)
   end
-  
+
   def test_lsym
     GLoc.load_localized_strings File.join(File.dirname(__FILE__),'lang')
     assert_equal 'enにもjaにもある', LClass_ja.ltry(:in_both_langs)
     assert_equal 'hello', LClass_ja.ltry('hello')
     assert_equal nil, LClass_ja.ltry(nil)
   end
-  
+
 #  def test_forced
 #    assert_equal :en_AU, LClass_forced_au.current_language
 #    a= LClass_forced_au.new
@@ -193,9 +193,9 @@ class GLocTest < Test::Unit::TestCase
     assert_equal 'a few men (3)', lwr_(:asd, :a, 3)
     assert_equal 'soo many men', lwr_(:asd, :a, 12)
     assert_equal 'soo many men', lwr_(:asd, :a, 20)
-    
+
   end
-  
+
   def test_distance_in_words
     load_default_strings
     [
@@ -235,7 +235,7 @@ class GLocTest < Test::Unit::TestCase
       assert_equal ru, distance_of_time_in_words(t,0,inc_sec)
     end
   end
-  
+
   def test_age
     load_default_strings
     [
@@ -251,7 +251,7 @@ class GLocTest < Test::Unit::TestCase
       assert_equal ru, l_age(a)
     end
   end
-  
+
   def test_yesno
     load_default_strings
     set_language :en
@@ -260,7 +260,7 @@ class GLocTest < Test::Unit::TestCase
     assert_equal 'Yes', l_YesNo(true)
     assert_equal 'No', l_YesNo(false)
   end
-  
+
   def test_all_languages_have_values_for_helpers
     load_default_strings
     t= Time.local(2000, 9, 15, 11, 23, 57)
@@ -274,13 +274,13 @@ class GLocTest < Test::Unit::TestCase
       [true,false].each{|v| l_YesNo(v); l_yesno(v) }
     }
   end
-  
+
   def test_similar_languages
     GLoc.add_localized_strings :en, :a => 'a'
     GLoc.add_localized_strings :en_AU, :a => 'a'
     GLoc.add_localized_strings :ja, :a => 'a'
     GLoc.add_localized_strings :zh_tw, :a => 'a'
-    
+
     assert_equal :en, GLoc.similar_language(:en)
     assert_equal :en, GLoc.similar_language('en')
     assert_equal :ja, GLoc.similar_language(:ja)
@@ -305,7 +305,7 @@ class GLocTest < Test::Unit::TestCase
     assert_equal nil, GLoc.similar_language('eZ_en')
     assert_equal nil, GLoc.similar_language('AU-ZH')
   end
-  
+
   def test_clear_strings_and_similar_langs
     GLoc.add_localized_strings :en, :a => 'a'
     GLoc.add_localized_strings :en_AU, :a => 'a'
@@ -329,7 +329,7 @@ class GLocTest < Test::Unit::TestCase
     assert_equal '日本語', l_lang_name('ja')
     assert_equal '英語', l_lang_name(:en)
   end
-  
+
   def test_charset_change_all
     load_default_strings
     GLoc.add_localized_strings :ja2, :a => 'a'
@@ -345,13 +345,13 @@ class GLocTest < Test::Unit::TestCase
     GLoc.set_charset 'sjis'
     assert_equal 'sjis', GLoc.get_charset(:ja)
     assert_equal 'sjis', GLoc.get_charset(:ja2)
-    
+
     [:ja, :ja2].each do |l|
       set_language l
       assert_equal "82CD82A2", l_yesno(true).unpack('H*')[0].upcase
     end
   end
-  
+
   def test_charset_change_single
     load_default_strings
     GLoc.add_localized_strings :ja2, :a => 'a'
@@ -370,7 +370,7 @@ class GLocTest < Test::Unit::TestCase
     assert_equal 'sjis', GLoc.get_charset(:ja)
     assert_equal 'utf-8', GLoc.get_charset(:ja2)
     assert_equal 'utf-8', GLoc.get_charset(:ja3)
-    
+
     set_language :ja
     assert_equal "82CD82A2", l_yesno(true).unpack('H*')[0].upcase
     set_language :ja2
@@ -390,7 +390,7 @@ class GLocTest < Test::Unit::TestCase
     set_language :ja3
     assert_equal "A4CFA4A4", l_yesno(true).unpack('H*')[0].upcase
   end
-  
+
   def test_set_language_if_valid
     GLoc.add_localized_strings :en, :a => 'a'
     GLoc.add_localized_strings :zh_tw, :a => 'a'
@@ -410,7 +410,7 @@ class GLocTest < Test::Unit::TestCase
     assert set_language_if_valid(:en)
     assert_equal :en, current_language
   end
-  
+
   #===========================================================================
   protected
 
@@ -426,7 +426,7 @@ class GLocTest < Test::Unit::TestCase
       end
     }
   end
-  
+
   def load_default_strings
     GLoc.load_localized_strings File.join(File.dirname(__FILE__),'..','lang')
   end

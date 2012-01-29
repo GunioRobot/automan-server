@@ -4,13 +4,13 @@ class ActiveRecord::Base
 
     define_method(attr_name) do
       expected_class = self.class.serialized_attributes[attr_name.to_s]
-      
+
       is_type = begin
-      	(value = super).is_a?(expected_class)  	
+      	(value = super).is_a?(expected_class)
       rescue NoMethodError => e
-      	false      	
+      	false
       end
-      
+
       if is_type
         value
       else

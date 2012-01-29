@@ -12,13 +12,13 @@
 		<% table @pm_links[0..10], %w[项目名称  page名称 状态] do |row, klass|%>
 				<% project_model = row.model_in_project %>
 				<tr class="<%= klass %>">
-			  	<td>                       
+			  	<td>
 						<%= link_to row.pm_lib.name, row.pm_lib,:popup=>true%>
 					</td>
-			  	<td>                       
+			  	<td>
 						<%= link_to project_model.name, pm_model_path(project_model), :class=>"winpopup", :popup=>true %>
 					</td>
-			  	<td>                       
+			  	<td>
 					 		<%= row.status_text %>
 					</td>
 			</tr>
@@ -26,5 +26,5 @@
 
 
 	<% end %>
-	
+
 </div>

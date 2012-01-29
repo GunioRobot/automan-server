@@ -8,34 +8,34 @@ module GLoc
   UTF_8= 'utf-8'
   SHIFT_JIS= 'sjis'
   EUC_JP= 'euc-jp'
-  
+
   # This module will be included in both instances and classes of GLoc includees.
   # It is also included as class methods in the GLoc module itself.
   module InstanceMethods
     include Helpers
-    
+
     # Returns a localized string.
     def l(symbol, *arguments)
       return GLoc._l(symbol,current_language,*arguments)
     end
-  
+
     # Returns a localized string in a specified language.
     # This does not effect <tt>current_language</tt>.
     def ll(lang, symbol, *arguments)
       return GLoc._l(symbol,lang.to_sym,*arguments)
     end
-    
+
     # Returns a localized string if the argument is a Symbol, else just returns the argument.
     def ltry(possible_key)
       possible_key.is_a?(Symbol) ? l(possible_key) : possible_key
     end
-    
+
     # Uses the default GLoc rule to return a localized string.
     # See lwr_() for more info.
     def lwr(symbol, *arguments)
       lwr_(:default, symbol, *arguments)
     end
-    
+
     # Uses a <em>rule</em> to return a localized string.
     # A rule is a function that uses specified arguments to return a localization key prefix.
     # The prefix is appended to the localization key originally specified, to create a new key which
@@ -48,7 +48,7 @@ module GLoc
     def l_has_string?(symbol)
       return GLoc._l_has_string?(symbol,current_language)
     end
-    
+
     # Sets the current language for this instance/class.
     # Setting the language of a class effects all instances unless the instance has its own language defined.
     def set_language(language)
@@ -68,19 +68,19 @@ module GLoc
       end
     end
   end
-  
+
   #---------------------------------------------------------------------------
   # Instance
-  
+
   include ::GLoc::InstanceMethods
   # Returns the instance-level current language, or if not set, returns the class-level current language.
   def current_language
     @gloc_language || self.class.current_language
   end
-  
+
   #---------------------------------------------------------------------------
   # Class
-  
+
   # All classes/modules that include GLoc will also gain these class methods.
   # Notice that the GLoc::InstanceMethods module is also included.
   module ClassMethods
@@ -90,32 +90,32 @@ module GLoc
       @gloc_language || GLoc.current_language
     end
   end
-  
+
   def self.included(target) #:nodoc:
     super
     class << target
       include ::GLoc::ClassMethods
     end
   end
-  
+
   #---------------------------------------------------------------------------
   # GLoc module
-  
+
   class << self
     include ::GLoc::InstanceMethods
-    
+
     # Returns the default language
     def current_language
       GLoc::CONFIG[:default_language]
     end
-    
+
     # Adds a collection of localized strings to the in-memory string store.
     def add_localized_strings(lang, symbol_hash, override=true, strings_charset=nil)
       _verbose_msg {"Adding #{symbol_hash.size} #{lang} strings."}
       _add_localized_strings(lang, symbol_hash, override, strings_charset)
       _verbose_msg :stats
     end
-    
+
     # Creates a backup of the internal state of GLoc (ie. strings, langs, rules, config)
     # and optionally clears everything.
     def backup_state(clear=false)
@@ -123,7 +123,7 @@ module GLoc
       _get_internal_state_vars.each{|o| o.clear} if clear
       s
     end
-    
+
     # Removes all localized strings from memory, either of a certain language (or languages),
     # or entirely.
     def clear_strings(*languages)
@@ -141,40 +141,40 @@ module GLoc
       end
     end
     alias :_clear_strings :clear_strings
-    
+
     # Removes all localized strings from memory, except for those of certain specified languages.
     def clear_strings_except(*languages)
       clear= (LOCALIZED_STRINGS.keys - languages)
       _clear_strings(*clear) unless clear.empty?
     end
-    
+
     # Returns the charset used to store localized strings in memory.
     def get_charset(lang)
       CONFIG[:internal_charset_per_lang][lang] || CONFIG[:internal_charset]
     end
-    
+
     # Returns a GLoc configuration value.
     def get_config(key)
       CONFIG[key]
     end
-    
+
     # Loads the localized strings that are included in the GLoc library.
     def load_gloc_default_localized_strings(override=false)
       GLoc.load_localized_strings "#{File.dirname(__FILE__)}/../lang", override
     end
-    
+
     # Loads localized strings from all yml files in the specifed directory.
     def load_localized_strings(dir=nil, override=true)
       _charset_required
       _get_lang_file_list(dir).each {|filename|
-        
+
         # Load file
         raw_hash = YAML::load(File.read(filename))
         raw_hash={} unless raw_hash.kind_of?(Hash)
         filename =~ /([^\/\\]+)\.ya?ml$/
         lang = $1.to_sym
         file_charset = raw_hash['file_charset'] || UTF_8
-  
+
         # Convert string keys to symbols
         dest_charset= get_charset(lang)
         _verbose_msg {"Reading file #{filename} [charset: #{file_charset} --> #{dest_charset}]"}
@@ -184,13 +184,13 @@ module GLoc
             symbol_hash[key.to_sym] = i.iconv(value)
           }
         end
-  
+
         # Add strings to repos
         _add_localized_strings(lang, symbol_hash, override)
       }
       _verbose_msg :stats
     end
-    
+
     # Restores a backup of GLoc's internal state that was made with backup_state.
     def restore_state(state)
       _get_internal_state_vars.each do |o|
@@ -198,13 +198,13 @@ module GLoc
         o.send o.respond_to?(:merge!) ? :merge! : :concat, state.shift
       end
     end
-    
+
     # Sets the charset used to internally store localized strings.
     # You can set the charset to use for a specific language or languages,
     # or if none are specified the charset for ALL localized strings will be set.
     def set_charset(new_charset, *langs)
       CONFIG[:internal_charset_per_lang] ||= {}
-      
+
       # Convert symbol shortcuts
       if new_charset.is_a?(Symbol)
         new_charset= case new_charset
@@ -214,7 +214,7 @@ module GLoc
           else new_charset.to_s
           end
       end
-      
+
       # Convert existing strings
       (langs.empty? ? LOCALIZED_STRINGS.keys : langs).each do |lang|
         cur_charset= get_charset(lang)
@@ -226,7 +226,7 @@ module GLoc
           end
         end
       end
-      
+
       # Set new charset value
       if langs.empty?
         _verbose_msg {"Setting GLoc charset for all languages to #{new_charset}"}
@@ -244,7 +244,7 @@ module GLoc
     def set_config(hash)
       CONFIG.merge! hash
     end
-    
+
     # Sets the $KCODE global variable according to a specified charset, or else the
     # current default charset for the default language.
     def set_kcode(charset=nil)
@@ -258,7 +258,7 @@ module GLoc
         end
       _verbose_msg {"$KCODE set to #{$KCODE}"}
     end
-    
+
     # Tries to find a valid language that is similar to the argument passed.
     # Eg. :en, :en_au, :EN_US are all similar languages.
     # Returns <tt>nil</tt> if no similar languages are found.
@@ -279,12 +279,12 @@ module GLoc
       # Nothing found
       nil
     end
-    
+
     # Returns an array of (currently) valid languages (ie. languages for which localized data exists).
     def valid_languages
       LOCALIZED_STRINGS.keys
     end
-    
+
     # Returns <tt>true</tt> if there are any localized strings for a specified language.
     # Note that although <tt>set_langauge nil</tt> is perfectly valid, <tt>nil</tt> is not a valid language.
     def valid_language?(language)

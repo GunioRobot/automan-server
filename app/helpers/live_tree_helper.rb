@@ -5,12 +5,12 @@ module LiveTreeHelper
 
    def _recurse_live_tree_data(item, depth, get_item_id_proc, get_item_name_proc, get_item_children_proc, get_item_parent_proc, special_child_id = nil, special_child_data = nil) #:nodoc:
       result = "{id:" + _id_to_javascript(get_item_id_proc.call(item)) + ",name:'" + escape_javascript(get_item_name_proc.call(item).to_s) + "'"
-      
+
       if item.respond_to?(:live_tree_item_html_options)
       	opt = item.live_tree_item_html_options
       	result += ", "+opt.map{|k,v|"#{k}:#{_id_to_javascript(v)}"}.join(" ,")
     	end
-      
+
       if get_item_children_proc.call(item).size == 0
          result += ",children:[]"
       elsif depth == nil || depth > 1
@@ -51,7 +51,7 @@ module LiveTreeHelper
       depth = params[:depth] == nil ? nil : params[:depth].to_i
       include_parents = params[:include_parents]
       root_item_id = params[:root_item_id] == nil ? nil : params[:root_item_id].to_i
-			
+
       result = _recurse_live_tree_data(item, depth, get_item_id_proc, get_item_name_proc, get_item_children_proc, get_item_parent_proc)
       if include_parents
          while get_item_parent_proc.call(item) != nil && (root_item_id == nil || get_item_id_proc.call(item) != root_item_id)

@@ -69,7 +69,7 @@ module Acts #:nodoc:
           nodes << node = node.parent while node.parent
           nodes
         end
-        
+
         def ancestors_except_root
            node, nodes = self, []
            while node.parent
@@ -83,12 +83,12 @@ module Acts #:nodoc:
           node = self
           node = node.parent while node.parent
           node
-        end  
-        
+        end
+
         def root?
           self.parent_id.nil?
-        end   
-        
+        end
+
 
         # Returns all siblings of the current node.
         #
@@ -102,19 +102,19 @@ module Acts #:nodoc:
         #   subchild1.self_and_siblings # => [subchild1, subchild2]
         def self_and_siblings
           parent ? parent.children : self.class.roots
-        end     
-        
-        
+        end
+
+
         def all_children
 			    return [] if self.children.empty?
 			    result = []
 			    self.children.each do |child|
 			      result<<child
 			      result+=child.all_children
-			    end         
+			    end
 			    result
-			  end        
-			  
+			  end
+
 			  def leaf?
 			  	self.children.count==0
 			  end

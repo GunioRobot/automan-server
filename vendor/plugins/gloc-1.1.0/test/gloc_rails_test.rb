@@ -20,7 +20,7 @@ class GLocRailsTestController < ActionController::Base
 end
 
 class GLocRailsTest < Test::Unit::TestCase
-  
+
   def setup
     @lstrings = GLoc::LOCALIZED_STRINGS.clone
     @old_config= GLoc::CONFIG.clone
@@ -32,13 +32,13 @@ class GLocRailsTest < Test::Unit::TestCase
     GLoc::LOCALIZED_STRINGS.merge! @lstrings
     GLoc::CONFIG.merge! @old_config
   end
-  
+
   def begin_new_request
     @controller = GLocRailsTestController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
   end
-  
+
   def test_autodetect_language
     GLoc::CONFIG[:default_language]= :def
     GLoc::CONFIG[:default_param_name] = 'plang'
@@ -69,7 +69,7 @@ class GLocRailsTest < Test::Unit::TestCase
     # different dialect
     subtest_autodetect_language :ZH_HK, 'zh', nil, 'de,EN-NZ,ja'
     subtest_autodetect_language :ZH_HK, 'monkey', 'zh', 'de,EN-NZ,ja'
-    
+
     # Check param/cookie names use defaults
     GLoc::CONFIG[:default_param_name] = 'p_lang'
     GLoc::CONFIG[:default_cookie_name] = 'c_lang'
@@ -86,11 +86,11 @@ class GLocRailsTest < Test::Unit::TestCase
     subtest_autodetect_language :def, 'ja', nil, 'en_US', :auto2
     subtest_autodetect_language :Ja, {:xx => 'ja'}, nil, 'en_US', :auto2
     subtest_autodetect_language :en_au, 'ja', 'en_au', 'en_US', :auto2
-    
+
     # autodetect_language_filter :only => :auto3, :check_cookie => false
     subtest_autodetect_language :Ja, 'ja', 'en_us', 'qwe_ja,zh,monkey_en;q=0.5', :auto3
     subtest_autodetect_language :ZH_HK, 'hehe', 'en_us', 'qwe_ja,zh,monkey_en;q=0.5', :auto3
-    
+
     # autodetect_language_filter :only => :auto4, :check_cookie => 'qwe', :check_params => false
     subtest_autodetect_language :def, 'ja', 'en_us', nil, :auto4
     subtest_autodetect_language :ZH_HK, 'ja', 'en_us', 'qwe_ja,zh,monkey_en;q=0.5', :auto4
@@ -114,5 +114,5 @@ class GLocRailsTest < Test::Unit::TestCase
       assert_equal b, @controller.callback_bad
     end
   end
-  
+
 end

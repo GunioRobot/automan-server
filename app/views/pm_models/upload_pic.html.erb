@@ -2,11 +2,11 @@
 <% form_for(image_url, :url => {:action=>"upload_pic"},  :html => { :multipart => true }) do |f| %>
 	<p> <%= f.file_field :image %> </p>
 	<p>
-	 <%= submit_tag '上传' %>	 
+	 <%= submit_tag '上传' %>
 	</p>
-	
-	<% if @pm_model.image %>	
-	    <%= image_tag @pm_model.image.url %>	
+
+	<% if @pm_model.image %>
+	    <%= image_tag @pm_model.image.url %>
 		 	<%= link_to "删除此图片" %>
 	<% end %>
-<% end %>  
+<% end %>

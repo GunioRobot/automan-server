@@ -1,39 +1,39 @@
 <%
 	all_children = model.all_children
  %>
- 
+
 
 
 
 <script type="text/javascript" charset="utf-8">
-	  jQuery(document).ready(function($) { 	  	
+	  jQuery(document).ready(function($) {
     	  $(".treeTable").treeTable();
-	  		
+
     	  $("#toogle-all").click(function(){
     	  	var otherClass = $(".parent.first-class")
     	  	var expanded = false
-    	  	jQuery.each(otherClass, function() {    	  		 
+    	  	jQuery.each(otherClass, function() {
 				  	 if($(this).hasClass("expanded")){
 				  	 	expanded = true;
 				  	 	return false
 				  	 }
 				  });
 				  var action = function(e){return e.expand()}
-				  
+
     	  	if(expanded){
     	  		action = function(e){return e.collapse()}
     	  	}
-    	  	
+
     	  	jQuery.each(otherClass, function(){
     	  		action($(this))
     	  	})
     	  })
   	})
-  	
+
 </script>
 <h3 style="width:800px;text-align:center;">页面概览</h3>
 <div id="page-summery">
-	
+
 
 <table class="treeTable wikitable" style="font-size: 97%;">
   <thead>
@@ -55,8 +55,8 @@
 	    <tr id="node-<%= e.id %>" class="entry <%= e.parent_id == model.id ? "first-class" : "other-class child-of-node-#{e.parent_id}" %>">
 	      	<a class="itemlink" id="element_item_link_3571"  href="<%= pm_element_path(e) %>" rel="facebox">
 	      		<span class="icon <%= e.live_tree_item_html_options[:cssClass]%>"></span>
-	      		<span class="live_tree_item_name"><%= e.name  %></span></a>	      		
-	      <td><%= inplace_update_attr(e, :title) %></td>                   
+	      		<span class="live_tree_item_name"><%= e.name  %></span></a>
+	      <td><%= inplace_update_attr(e, :title) %></td>
 	      <td><%= html_type(e) %></td>
 	      <td> <%= inplace_update_attr(e,"properties.selector")%></td>
 	      <td><%= boolean_display e.properties.required %></td>

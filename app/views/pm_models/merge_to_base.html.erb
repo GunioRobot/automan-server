@@ -5,11 +5,11 @@
 
 <%= render :partial => 'shared/diff', :locals => {:diff => @diff, :diff_type => 'sbs'} %>
 
-	
-<% merge_tag_html = submit_tag( "合并到基线", :id=>"submit", :confirm => "此操作将会:\n1: 删除项目中该页面的数据.\n2: 将合并后的结果覆盖到基线中.\n您确定继续？" )%>
-	
 
-<% form_tag '',{:method=>"post"}  do %>	
+<% merge_tag_html = submit_tag( "合并到基线", :id=>"submit", :confirm => "此操作将会:\n1: 删除项目中该页面的数据.\n2: 将合并后的结果覆盖到基线中.\n您确定继续？" )%>
+
+
+<% form_tag '',{:method=>"post"}  do %>
 <div style="text-align: center">
 	<% if @diff.same? %>
 		<%= hidden_field_tag "same", true %>
@@ -17,25 +17,25 @@
 	<% else %>
 		<button type="button" style="float:left;">使用左边的版本</button>
 		<button type="button" style="float:right;">使用右边的版本</button>
-	
+
 		<p></p>
-	
+
 		<% tabs = [{:code => "编辑xml"},{:preview => "预览&提交"}] %>
-	
+
 		<%= tabs_header(tabs) %>
-	
+
 		<% tab_content(:code, tabs) do %>
 			<textarea id = "merged" name="merged" cols="120" rows="20"></textarea>
 		<% end %>
-	
+
 		<% tab_content(:preview, tabs) do %>
 			<%= merge_tag_html %>
 			<div id="preview">
 				<h3>请点输入合并结果</h3>
 			</div>
-		
+
 		<% end %>
-	
+
 	<% end %>
 
 	<script type="text/javascript" charset="utf-8">
@@ -48,12 +48,12 @@
 				})
 				return false
 			})
-		
+
 			$("#tab-preview").click(function(){
 				$.post('<%= preview_pm_lib_pm_models_path(@pm_lib) %>',{xml: $("#merged")&&$("#merged").val()}, function(resp){$("#preview").html(resp)})
 				return false
 			})
-		
+
 			$("#submit").click(function(){
 				if($("#merged").val().trim().length == 0){
 					alert("请输入合并后的xml")
@@ -66,6 +66,6 @@
 	<% content_for :header_tags do %>
 		<%= stylesheet_link_tag "scm" %>
 	<% end %>
-	
+
 	</div>
 <% end %>
